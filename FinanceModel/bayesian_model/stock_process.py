@@ -1,0 +1,212 @@
+#-*- coding:utf8 -*-
+import json
+import sqlite3 as lite
+import hashlib
+import calculator
+from etool import logs,queue
+import argparse
+from datetime import datetime
+
+#rawData = {'feed': 'Bloomberg - Stock Index', 'updateTime': '09/28/2012 16:01:02', 'name': 'MERVAL', 'currentValue': '2451.73', 'queryTime': '10/01/2012 03:00:03', 'previousCloseValue': '2494.18', 'date': '2012-10-01T03:00:03', 'type': 'stock', 'embersId': '971752f23223c344e8732f32922e3f8e75ebd3ff'}
+#EnrichedData = 
+
+"""
+Description: 
+    input Parameters:
+    ap.add_argument('-f',dest="bloomberg_price_file",metavar="STOCK PRICE",type=str,help='The daily stock price file')
+    ap.add_argument('-t',dest="trend_file",metavar="TREND RANGE FILE",type=str,help='The trend type range')
+    ap.add_argument('-db',dest="db_file",metavar="Database",type=str,help='The stock price file')
+    ap.add_argument('-z',dest="port",metavar="ZMQ PORT",default="tcp://*:30115",type=str,nargs="?",help="The zmq port")
+Data flow:
+    1> read daily stock price from input file
+    2> store the raw price to table : t_bloomberg_prices
+    3> constructure enriched_price and store the enriched price to table: t_enriched_bloomberg_price
+        one_day_change, change_percent,zscore30,zscore90,trendType
+    4> push the enriched_price to ZMQ
+"""
+
+__processor__ = 'stock_process'
+log = logs.getLogger(__processor__)
+logs.init()
+TREND_RANGE = {}
+
+def getZscore(conn,cur_date,stock_index,cur_diff,duration):
+    cur = conn.cursor()
+    scores = []
+    sql = "select one_day_change from t_enriched_bloomberg_prices where post_date<? and name = ? order by post_date desc limit ?"
+    cur.execute(sql,(cur_date,stock_index,duration))
+    rows = cur.fetchall()
+    for row in rows:
+        scores.append(row[0])
+    zscore = calculator.calZscore(scores, cur_diff)
+    return zscore
+    
+        
+def get_trend_type(trend_file,raw_data):
+    """
+    Computing current day's trend changeType, compareing change percent to the trend range,
+    Choose the nearnes trend as current day's changeType    
+    """
+    
+    "Get the indicated stock range"
+    stockIndex = raw_data["name"]
+    tJson = TREND_RANGE[stockIndex]
+    
+    "Computing change percent"
+    lastPrice = float(raw_data["currentValue"])
+    preLastPrice = float(raw_data["previousCloseValue"])
+    changePercent = round((lastPrice - preLastPrice)/preLastPrice,4)
+    
+    distance = 10000
+    trendType = None
+    for changeType in tJson:
+        tmpDistance = min(abs(changePercent-tJson[changeType][0]),abs(changePercent-tJson[changeType][1]))
+        if tmpDistance < distance:
+            distance = tmpDistance
+            trendType = changeType
+            
+    #According the current change percent to adjust the range of trend type
+    bottom = tJson[trendType][0]
+    top = tJson[trendType][1]
+    
+    if changePercent > top:
+        top = changePercent
+    
+    if changePercent < bottom:
+        bottom = changePercent
+    
+    TREND_RANGE[stockIndex][trendType][0] = bottom
+    TREND_RANGE[stockIndex][trendType][1] = top
+    
+    return trendType
+    
+
+def process(conn,trend_file,port,raw_data):
+    "Check if current data already in database, if not exist then insert otherwise skip"
+    ifExisted = check_if_existed(conn,raw_data)
+    if not ifExisted:
+        sql = "insert into t_bloomberg_prices (embers_id,type,name,current_value,previous_close_value,update_time,query_time,post_date,source) values (?,?,?,?,?,?,?,?,?) "
+        embers_id = raw_data["embersId"]
+        ty = raw_data["type"]
+        name = raw_data["name"]
+        tmpUT =  raw_data["updateTime"].split(" ")[0]
+        update_time = raw_data["updateTime"]
+        last_price = float(raw_data["currentValue"])
+        pre_last_price = float(raw_data["previousCloseValue"])
+        one_day_change = round(last_price - pre_last_price,4)
+        query_time = raw_data["queryTime"]
+        source = raw_data["feed"]
+        post_date = tmpUT.split("/")[2] + "-" +  tmpUT.split("/")[0] + "-" + tmpUT.split("/")[1]
+        
+        cur = conn.cursor()
+        cur.execute(sql,(embers_id,ty,name,last_price,pre_last_price,update_time,query_time,post_date,source))
+        
+        "Initiate the enriched Data"
+        enrichedData = {}
+        
+        "calculate zscore 30 and zscore 90"
+        zscore30 = getZscore(conn,post_date,name,one_day_change,30)
+        zscore90 = getZscore(conn,post_date,name,one_day_change,90)
+        
+        trend_type = get_trend_type(trend_file,raw_data)
+        derived_from = "[" + embers_id + "]"
+        enrichedData["derivedFrom"] = derived_from
+        enrichedData["type"] = ty
+        enrichedData["name"] = name
+        enrichedData["postDate"] = post_date
+        enrichedData["currentValue"] = last_price
+        enrichedData["previousCloseValue"] = pre_last_price
+        enrichedData["oneDayChange"] = one_day_change
+        enrichedData["changePercent"] = round((last_price - pre_last_price)/pre_last_price,4)
+        enrichedData["trendType"] = trend_type
+        enrichedData["zscore30"] = zscore30
+        enrichedData["zscore90"] = zscore90
+        enrichedData["operateTime"] = datetime.now().isoformat()
+        enrichedDataEmID = hashlib.sha1(json.dumps(enrichedData)).hexdigest()
+        enrichedData["embersId"] = enrichedDataEmID
+       
+        insert_enriched_data(conn,enrichedData)
+        
+        conn.commit()
+        #push data to ZMQ
+        with queue.open(port, 'w', capture=False) as outq:
+            outq.write(enrichedData)
+            
+def insert_enriched_data(conn,enrichedData):
+    cur = conn.cursor()
+    sql = "insert into t_enriched_bloomberg_prices (embers_id,derived_from,type,name,post_date,operate_time,current_value,previous_close_value,one_day_change,change_percent,zscore30,zscore90,trend_type) values (?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    enrichedDataEmID = enrichedData["embersId"]
+    derivedFrom = enrichedData["derivedFrom"]
+    ty = enrichedData["type"]
+    name = enrichedData["name"] 
+    postDate = enrichedData["postDate"] 
+    operateTime = enrichedData["operateTime"] 
+    currentValue = enrichedData["currentValue"] 
+    previousCloseValue = enrichedData["previousCloseValue"]
+    oneDayChange = enrichedData["oneDayChange"]
+    changePercent = enrichedData["changePercent"]
+    zscore30 = enrichedData["zscore30"]
+    zscore90 = enrichedData["zscore90"]
+    trendType = enrichedData["trendType"]
+    
+    cur.execute(sql,(enrichedDataEmID,derivedFrom,ty,name,postDate,operateTime,currentValue,previousCloseValue,oneDayChange,changePercent,zscore30,zscore90,trendType))
+    
+def check_if_existed(conn,raw_data):
+    cur = conn.cursor()
+    ifExisted = True
+    sql = "select count(*) from t_bloomberg_prices where name = ? and post_date = ?"
+    stock_index =  raw_data["name"]  
+    tmpUT =  raw_data["updateTime"].split(" ")[0]
+    update_time = tmpUT.split("/")[2] + "-" +  tmpUT.split("/")[0] + "-" + tmpUT.split("/")[1] 
+    cur.execute(sql,(stock_index,update_time))
+    count = cur.fetchone()[0]
+    if count == 0:
+        ifExisted = False
+    return ifExisted    
+
+def parse_args():
+    ap = argparse.ArgumentParser("Process the raw stock index data")
+    ap.add_argument('-f',dest="bloomberg_price_file",metavar="STOCK PRICE",type=str,help='The stock price file')
+    ap.add_argument('-t',dest="trend_file",metavar="TREND RANGE FILE",type=str,help='The trend type range')
+    ap.add_argument('-db',dest="db_file",metavar="Database",type=str,help='The stock price file')
+    ap.add_argument('-z',dest="port",metavar="ZMQ PORT",default="tcp://*:30115",type=str,nargs="?",help="The zmq port")
+    return ap.parse_args() 
+
+def main():
+    #initiate parameters
+    global TREND_RANGE
+    args = parse_args()
+    bloomberg_price_file = args.bloomberg_price_file
+    conn = lite.connect(args.db_file)
+    port = args.port
+    trend_file = args.trend_file
+    "Load the trend changeType range file"
+    trendObject = None
+    with open(trend_file,"r") as tFile:
+        trendObject = json.load(tFile)
+    "Get the latest version of Trend Ranage"
+    trend_versionNum = max([int(v) for v in trendObject.keys()])
+    "To avoid changing the initiate values, we first transfer the json obj to string ,then load it to create a news object"
+    TREND_RANGE = json.loads(json.dumps(trendObject[str(trend_versionNum)]))
+    
+    #get raw price list
+    raw_price_list = []
+    with open(bloomberg_price_file,'r') as raw_file:
+        lines = raw_file.readlines()
+        for line in lines:
+            raw_data = json.loads(line.replace("\n","").replace("\r",""))
+            raw_price_list.append(raw_data)
+            
+    #process data one by one
+    for raw_data in raw_price_list:
+        process(conn,trend_file,port,raw_data)
+    
+    "Write back the trendFile"
+    new_version_num = trend_versionNum + 1
+    trendObject[str(new_version_num)] = TREND_RANGE
+    with open(trend_file,"w") as tFile:
+        tFile.write(json.dumps(trendObject))
+    
+if __name__ == "__main__":
+    main()
+
