@@ -5,7 +5,7 @@ import json
 import math
 import operator
 import hashlib
-from Util import calculator
+from Util import calculator,common
 import sqlite3 as lite
 import cProfile
 import daily_stock_process as dsp
@@ -196,6 +196,7 @@ def process_single_stock(conn,predict_date,stock_index,regeFlag=False):
         
         termList,newsDerived = get_term_list(conn, predict_date, stock_index)
         his_cluster_list,stockDerived = get_past_cluster_list(conn,predict_date,stock_index)
+        
         for cluster_type in cluster_pro_list:
             "compute the contribution of 3 past day's trend "
             stockIndexProbability = compute_stock_index_probability(conn,predict_date, cluster_type , stock_index,his_cluster_list )
@@ -212,7 +213,6 @@ def process_single_stock(conn,predict_date,stock_index,regeFlag=False):
         for item_key, item_value in predictiveResults.iteritems():
             finalRatio[item_key] = round(item_value / sumProbability,2)
         sorted_ratio = sorted( finalRatio.iteritems(), key = operator.itemgetter( 1 ), reverse = True )
-        print sorted_ratio
         clusterProbability[stock_index] = {}
         clusterProbability[stock_index][predict_date] = sorted_ratio[0][1]
         
@@ -269,10 +269,12 @@ def process_single_stock(conn,predict_date,stock_index,regeFlag=False):
 
 def dailySigmaTrends(stockIndex,cluster,m30,m90,std30,std90,curValue):
     #computing the bottom and upper line for daily sigma event
-    s4Bottom = m30 - 2*std30
-    s4Upper = m30 + 2*std30
-    s3Bottom = m90 - 1*std90
-    s3Upper = m90 + 1*std90
+    "get warning threshold"
+    warning_threshold = CONFIG["warning_threshold"]
+    s4Bottom = m30 - warning_threshold[0]*std30
+    s4Upper = m30 + warning_threshold[0]*std30
+    s3Bottom = m90 - warning_threshold[1]*std90
+    s3Upper = m90 + warning_threshold[1]*std90
     
     bottom = s4Bottom
     upper = s4Upper
@@ -447,6 +449,8 @@ def parse_args():
     ap.add_argument('-s',dest="stock_list",metavar="Stock List",type=str,nargs="+",help="The list of stock to be predicted")
     ap.add_argument('-ds',dest="start_date",metavar="Start Date to test",type=str,help="The start date need to test")
     ap.add_argument('-de',dest="end_date",metavar="End Date to test",type=str,help="The end date need to test")
+    ap.add_argument('-s30',dest="sig_30",type=str,nargs='?',default="4",help="Threshold for sigma 30 day")
+    ap.add_argument('-s90',dest="sig_90",type=str,nargs='?',default="3",help="Threshold for sigma 90 day")
     return ap.parse_args()
 
 def clear(conn):
@@ -471,10 +475,41 @@ def change_warning_format(warning):
 def daily_process(conn,trend_file,predict_date,stock_list):
     dsp.process_data(conn,trend_file,predict_date,stock_list)
 
+def create_conf(warning_threshold):
+    termConFile = common.get_configuration("model", "TERM_CONTRIBUTION_PATH")
+    clustConFile = common.get_configuration("model", "CLUSTER_CONTRIBUTION_PATH")
+    clustProFile = common.get_configuration("model", "CLUSTER_PROBABILITY_PATH")
+    keyWordsFile = common.get_configuration("training", "VOCABULARY_FILE")
+    trendFile = common.get_configuration("model", "TREND_RANGE_FILE")
+    
+    conf = {}
+    conf["1"] = {}
+    conf["1"]["termContribution"] = json.load(open(termConFile))
+    conf["1"]["clusterProbability"] = json.load(open(clustProFile))
+    conf["1"]["clusterContribution"] = json.load(open(clustConFile))
+    conf["1"]["location"] = {"BVPSBVPS":"Panama","MERVAL":"Argentina","IBOV":"Brazil","CHILE65":"Chile","COLCAP":"Colombia","CRSMBCT":"Costa Rica","MEXBOL":"Mexico","IGBVL":"Peru","IBVC":"Venezuela"}
+    conf["1"]["stocks"] = ["MERVAL","IBOV","CHILE65","COLCAP","CRSMBCT","MEXBOL","BVPSBVPS","IGBVL","IBVC"]
+    conf["1"]["kyewordList"] = json.load(open(keyWordsFile))
+    conf["1"]["warning_threshold"] = warning_threshold
+    conf["1"]["version"] = "1"
+    
+    with open("./model_test.conf","w") as o_q:
+        o_q.write(json.dumps(conf))
+    
+    conf_trend = {}
+    conf_trend["1"] = json.load(open(trendFile))
+    with open("./trendRange.json","w") as o_q:
+        o_q.write(json.dumps(conf_trend))
+
 def main():
     global CONFIG,VOCABULARY_FILE,PORT,TREND_FILE,__version__
     "Get the input args"
     args = parse_args()
+    sig_30 = float(args.sig_30)
+    sig_90 = float(args.sig_90)
+    
+    threshold = [sig_30,sig_90]
+    create_conf(threshold)
     
     d_format = "%Y-%m-%d"
     start_date = datetime.strptime(args.start_date,d_format)

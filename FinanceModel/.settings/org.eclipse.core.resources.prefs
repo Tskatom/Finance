@@ -10,4 +10,3 @@ encoding//bayesian_model/bloomberg_news_ingest.py=utf-8
 encoding//bayesian_model/bloomberg_news_process.py=utf8
 encoding//bayesian_model/boil_bloomberg_news_ingest.py=utf-8
 encoding//bayesian_model/stock_process.py=utf8
-encoding//simpleDB_version/sim_bloomberg_news_process.py=utf8

@@ -120,7 +120,7 @@ def load_gsr_warnings(filename="./data/all_gsr_warnings.txt", \
     import json
     gsr_events = [json.loads(e) for e in open(filename,'r').readlines()]
     if eventType is not None:
-        gsr_events = group_by(gsr_events,key=lambda e : e['eventId'][:2])
+        gsr_events = group_by(gsr_events,key=lambda e : e['eventId'][:3])
         try:
             gsr_events = gsr_events[eventType]
         except KeyError:

@@ -6,6 +6,7 @@ import calculator
 from etool import logs,queue
 import argparse
 from datetime import datetime
+import boto
 
 #rawData = {'feed': 'Bloomberg - Stock Index', 'updateTime': '09/28/2012 16:01:02', 'name': 'MERVAL', 'currentValue': '2451.73', 'queryTime': '10/01/2012 03:00:03', 'previousCloseValue': '2494.18', 'date': '2012-10-01T03:00:03', 'type': 'stock', 'embersId': '971752f23223c344e8732f32922e3f8e75ebd3ff'}
 #EnrichedData = 
@@ -15,7 +16,6 @@ Description:
     input Parameters:
     ap.add_argument('-f',dest="bloomberg_price_file",metavar="STOCK PRICE",type=str,help='The daily stock price file')
     ap.add_argument('-t',dest="trend_file",metavar="TREND RANGE FILE",type=str,help='The trend type range')
-    ap.add_argument('-db',dest="db_file",metavar="Database",type=str,help='The stock price file')
     ap.add_argument('-z',dest="port",metavar="ZMQ PORT",default="tcp://*:30115",type=str,nargs="?",help="The zmq port")
 Data flow:
     1> read daily stock price from input file
@@ -30,14 +30,17 @@ log = logs.getLogger(__processor__)
 logs.init()
 TREND_RANGE = {}
 
+def get_domain(conn,domain_name):
+    conn.create_domain(domain_name)
+    return conn.get_domain(domain_name)
+
 def getZscore(conn,cur_date,stock_index,cur_diff,duration):
-    cur = conn.cursor()
     scores = []
-    sql = "select one_day_change from t_enriched_bloomberg_prices where post_date<? and name = ? order by post_date desc limit ?"
-    cur.execute(sql,(cur_date,stock_index,duration))
-    rows = cur.fetchall()
+    t_domain = get_domain(conn,'t_enriched_bloomberg_prices')
+    sql = "select oneDayChange from t_enriched_bloomberg_prices where postDate<'{}' and name = '{}' order by postDate desc".format(cur_date,stock_index)
+    rows = t_domain.select(sql,max_items=duration)
     for row in rows:
-        scores.append(row[0])
+        scores.append(float(row['oneDayChange']))
     zscore = calculator.calZscore(scores, cur_diff)
     return zscore
     
@@ -85,7 +88,6 @@ def process(conn,trend_file,port,raw_data):
     "Check if current data already in database, if not exist then insert otherwise skip"
     ifExisted = check_if_existed(conn,raw_data)
     if not ifExisted:
-        sql = "insert into t_bloomberg_prices (embers_id,type,name,current_value,previous_close_value,update_time,query_time,post_date,source) values (?,?,?,?,?,?,?,?,?) "
         embers_id = raw_data["embersId"]
         ty = raw_data["type"]
         name = raw_data["name"]
@@ -97,10 +99,10 @@ def process(conn,trend_file,port,raw_data):
         query_time = raw_data["queryTime"]
         source = raw_data["feed"]
         post_date = tmpUT.split("/")[2] + "-" +  tmpUT.split("/")[0] + "-" + tmpUT.split("/")[1]
+        raw_data['postDate'] = post_date
         
-        cur = conn.cursor()
-        cur.execute(sql,(embers_id,ty,name,last_price,pre_last_price,update_time,query_time,post_date,source))
-        
+        t_domain = get_domain(conn,'t_bloomberg_prices')
+        t_domain.put_attributes(embers_id,raw_data)
         "Initiate the enriched Data"
         enrichedData = {}
         
@@ -109,7 +111,8 @@ def process(conn,trend_file,port,raw_data):
         zscore90 = getZscore(conn,post_date,name,one_day_change,90)
         
         trend_type = get_trend_type(trend_file,raw_data)
-        derived_from = "[" + embers_id + "]"
+        derived_from = {"derivedIds":[embers_id]}
+        
         enrichedData["derivedFrom"] = derived_from
         enrichedData["type"] = ty
         enrichedData["name"] = name
@@ -127,39 +130,27 @@ def process(conn,trend_file,port,raw_data):
        
         insert_enriched_data(conn,enrichedData)
         
-        conn.commit()
         #push data to ZMQ
         with queue.open(port, 'w', capture=False) as outq:
             outq.write(enrichedData)
             
 def insert_enriched_data(conn,enrichedData):
-    cur = conn.cursor()
-    sql = "insert into t_enriched_bloomberg_prices (embers_id,derived_from,type,name,post_date,operate_time,current_value,previous_close_value,one_day_change,change_percent,zscore30,zscore90,trend_type) values (?,?,?,?,?,?,?,?,?,?,?,?,?)"
-    enrichedDataEmID = enrichedData["embersId"]
-    derivedFrom = enrichedData["derivedFrom"]
-    ty = enrichedData["type"]
-    name = enrichedData["name"] 
-    postDate = enrichedData["postDate"] 
-    operateTime = enrichedData["operateTime"] 
-    currentValue = enrichedData["currentValue"] 
-    previousCloseValue = enrichedData["previousCloseValue"]
-    oneDayChange = enrichedData["oneDayChange"]
-    changePercent = enrichedData["changePercent"]
-    zscore30 = enrichedData["zscore30"]
-    zscore90 = enrichedData["zscore90"]
-    trendType = enrichedData["trendType"]
     
-    cur.execute(sql,(enrichedDataEmID,derivedFrom,ty,name,postDate,operateTime,currentValue,previousCloseValue,oneDayChange,changePercent,zscore30,zscore90,trendType))
+    t_domain = get_domain(conn,'t_enriched_bloomberg_prices')
+    embers_id = enrichedData["embersId"]
+    t_domain.put_attributes(embers_id,enrichedData)
     
 def check_if_existed(conn,raw_data):
-    cur = conn.cursor()
     ifExisted = True
-    sql = "select count(*) from t_bloomberg_prices where name = ? and post_date = ?"
+    t_domain = get_domain(conn,'t_bloomberg_prices')
     stock_index =  raw_data["name"]  
     tmpUT =  raw_data["updateTime"].split(" ")[0]
     update_time = tmpUT.split("/")[2] + "-" +  tmpUT.split("/")[0] + "-" + tmpUT.split("/")[1] 
-    cur.execute(sql,(stock_index,update_time))
-    count = cur.fetchone()[0]
+    sql = "select count(*) from t_bloomberg_prices where name = '{}' and postDate = '{}'".format(stock_index,update_time)
+    rs = t_domain.select(sql)
+    count = 0
+    for r in rs:
+        count = int(r['Count'])
     if count == 0:
         ifExisted = False
     return ifExisted    
@@ -167,9 +158,10 @@ def check_if_existed(conn,raw_data):
 def parse_args():
     ap = argparse.ArgumentParser("Process the raw stock index data")
     ap.add_argument('-f',dest="bloomberg_price_file",metavar="STOCK PRICE",type=str,help='The stock price file')
-    ap.add_argument('-t',dest="trend_file",metavar="TREND RANGE FILE",type=str,help='The trend type range')
-    ap.add_argument('-db',dest="db_file",metavar="Database",type=str,help='The stock price file')
+    ap.add_argument('-t',dest="trend_file",metavar="TREND RANGE FILE",default="./data/trendRange.json", type=str,nargs='?',help="The trend range file")
     ap.add_argument('-z',dest="port",metavar="ZMQ PORT",default="tcp://*:30115",type=str,nargs="?",help="The zmq port")
+    ap.add_argument('-kd',dest="key_id",metavar="KeyId for AWS",type=str,help="The key id for aws")
+    ap.add_argument('-sr',dest="secret",metavar="secret key for AWS",type=str,help="The secret key for aws")
     return ap.parse_args() 
 
 def main():
@@ -177,7 +169,10 @@ def main():
     global TREND_RANGE
     args = parse_args()
     bloomberg_price_file = args.bloomberg_price_file
-    conn = lite.connect(args.db_file)
+    KEY_ID = args.key_id
+    SECRET = args.secret
+    conn = boto.connect_sdb(KEY_ID,SECRET)
+    
     port = args.port
     trend_file = args.trend_file
     "Load the trend changeType range file"

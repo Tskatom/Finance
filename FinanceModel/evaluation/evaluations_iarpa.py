@@ -13,7 +13,19 @@ from utils import iso_str_dt, group_by, \
                   calc_months_from_time_range
 from evaluation.metrics import CUMetrics as mt
 from datetime import datetime
+import argparse
+
 MONTH_YEAR = "%b %Y"
+
+def arg_parse():
+    ap = argparse.ArgumentParser("The automatic training and test tools")
+    ap.add_argument('-s',dest='start',type=str,help='The start time of evaluation')
+    ap.add_argument('-e',dest='end',type=str,help='The end time of evaluation')
+    ap.add_argument('-ev',dest="event_type",type=str,default="041",nargs="?",help='The type of event')
+    ap.add_argument('-gsr',dest="gsr_file",type=str,default="./data/all_gsr_warnings.txt",nargs="?",help='The path of gsr event')
+    ap.add_argument('-wr',dest="warning_file",type=str,default="./data/warning.txt",nargs="?",help='The path of warning')
+    
+    return ap.parse_args()
 
 def do_evaluation_global_optimum(warnings, gsr_events, start, end):
     from evaluation.matching import MatchingGlobalOptimum as MGO
@@ -67,11 +79,18 @@ def do_evaluation_global_optimum(warnings, gsr_events, start, end):
 
 def main():
     from utils import load_gsr_warnings,load_warnings
-    cu_gsr_events = load_gsr_warnings(eventType='04')
-    warnings = load_warnings()
+    args = arg_parse()
+    start = args.start
+    end = args.end
+    event_type = args.event_type
+    gsr_file = args.gsr_file
+    warning_file = args.warning_file
+    
+    cu_gsr_events = load_gsr_warnings(filename=gsr_file,eventType=event_type)
+    warnings = load_warnings(filename=warning_file)
     t_format = "%Y-%m-%d"
-    start = datetime.strptime("2012-01-01",t_format)
-    end = datetime.strptime("2012-10-31",t_format)
+    start = datetime.strptime(start,t_format)
+    end = datetime.strptime(end,t_format)
     wbk = xlwt.Workbook()
     sheet = wbk.add_sheet('report')
     sheet.write(0,0,'Country')

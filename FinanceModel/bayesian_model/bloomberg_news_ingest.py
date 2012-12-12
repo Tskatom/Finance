@@ -79,9 +79,8 @@ def get_news_by_url(url):
             author = ele.contents[0].strip().replace("By","").replace("-","").replace("and", ",").strip();
         article["author"] = author
         
-        # content - FIXME - Extractor undefined
-        content = soup.body.get_text()
-        article["content"] =  content
+        # content
+        article["content"] =  unicode(soup.body)
         
         # source info
         source = "Bloomberg News"

@@ -184,31 +184,6 @@ def get_uncompleted_mission():
     except:
         log.info("Error:%s" %(sys.exc_info()[0]))
 
-def create_conf():
-    termConFile = common.get_configuration("model", "TERM_CONTRIBUTION_PATH")
-    clustConFile = common.get_configuration("model", "CLUSTER_CONTRIBUTION_PATH")
-    clustProFile = common.get_configuration("model", "CLUSTER_PROBABILITY_PATH")
-    keyWordsFile = common.get_configuration("training", "VOCABULARY_FILE")
-    trendFile = common.get_configuration("model", "TREND_RANGE_FILE")
-    
-    conf = {}
-    conf["1"] = {}
-    conf["1"]["termContribution"] = json.load(open(termConFile))
-    conf["1"]["clusterProbability"] = json.load(open(clustProFile))
-    conf["1"]["clusterContribution"] = json.load(open(clustConFile))
-    conf["1"]["location"] = {"BVPSBVPS":"Panama","MERVAL":"Argentina","IBOV":"Brazil","CHILE65":"Chile","COLCAP":"Colombia","CRSMBCT":"Costa Rica","MEXBOL":"Mexico","IGBVL":"Peru","IBVC":"Venezuela"}
-    conf["1"]["stocks"] = ["MERVAL","IBOV","CHILE65","COLCAP","CRSMBCT","MEXBOL","BVPSBVPS","IGBVL","IBVC"]
-    conf["1"]["kyewordList"] = json.load(open(keyWordsFile))
-    conf["1"]["version"] = "1"
-    
-    with open("./model_test.conf","w") as o_q:
-        o_q.write(json.dumps(conf))
-    
-    conf_trend = {}
-    conf_trend["1"] = json.load(open(trendFile))
-    with open("./trendRange.json","w") as o_q:
-        o_q.write(json.dumps(conf_trend))
-    
 def execute(traingStart,traingEnd,estimationStart,estimationEnd,key_num,clu_num):
     "Clear the database data"
     print "Clear Start Time: ",datetime.strftime(datetime.now(),"%Y-%m-%d %H:%M:%S")
@@ -240,8 +215,6 @@ def execute(traingStart,traingEnd,estimationStart,estimationEnd,key_num,clu_num)
     ctermc.compute_term_contribution()
     print "Computing the Term Contribution End Time: ",datetime.strftime(datetime.now(),"%Y-%m-%d %H:%M:%S")
     
-    "create configuration"
-    create_conf()
 #    "RawNewsProcess Start"
 #    print "RawNewsProcess Start Time: ",datetime.strftime(datetime.now(),"%Y-%m-%d %H:%M:%S")
 #    get_uncompleted_mission()
@@ -270,10 +243,12 @@ def main():
     trainingEnd = args.tEnd
     estimationStart = args.eStart
     estimationEnd = args.eEnd
+    key_num = args.key_numbers
+    clu_num = args.c_numbers
     
     common.init(configFilePath)
     
-    execute(trainingStart,trainingEnd,estimationStart,estimationEnd)
+    execute(trainingStart,trainingEnd,estimationStart,estimationEnd,key_num,clu_num)
 
 if __name__ == "__main__":
     cProfile.run("main()")

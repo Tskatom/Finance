@@ -118,7 +118,8 @@ def process(conn,raw_data):
            
             insert_enriched_data(conn,enrichedData)
     except:
-        log.exception(sys.exc_info())
+        print sys.exc_info()
+        exit()
             
 def insert_enriched_data(conn,enrichedData):
     cur = conn.cursor()
@@ -166,17 +167,17 @@ def main():
     assert db_path," We need db_path to store our data"
     conn = lite.connect(db_path)
     
-    files = os.listdir(price_dir)
-    for f in files:
-        f = os.path.join(price_dir,f)
-        if os.path.isfile(f):
-            stock, stockjson = transcsv2json(f)
-            name = stock + ".json"
-            out_file = os.path.join(out_dir,name)
-            with open(out_file,"w") as out_w:
-                for day_value in stockjson:
-                    out_w.write(json.dumps(day_value))
-                    out_w.write("\n")
+#    files = os.listdir(price_dir)
+#    for f in files:
+#        f = os.path.join(price_dir,f)
+#        if os.path.isfile(f):
+#            stock, stockjson = transcsv2json(f)
+#            name = stock + ".json"
+#            out_file = os.path.join(out_dir,name)
+#            with open(out_file,"w") as out_w:
+#                for day_value in stockjson:
+#                    out_w.write(json.dumps(day_value))
+#                    out_w.write("\n")
     
     "Import the data to database"
     jsonFiles = os.listdir(out_dir)

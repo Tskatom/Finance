@@ -1,3 +1,22 @@
+# Update 2012-12-07
+## 1. setup threshold for warning sending : Add two configuration parameters in bayesian_model/data/bayesian_model.cfg
+	"warning_threshold":[sig30,sig90] sig30 and sig90 are the minimum thread to trigger the warning
+
+## 2. add the evaluation module
+	The evaluation module using Global Optimal rules to matching the GSR events and warning.
+	Then output the results containing: precision, recall, mean-leading, mean-quality and mean-probability given by Month, country
+	The execute the evalution program, run FinanceModel/evaluation/evaluations_iarpa.py
+	The parameters listed as below:
+		ap.add_argument('-s',dest='start',type=str,help='The start time of evaluation')
+	    ap.add_argument('-e',dest='end',type=str,help='The end time of evaluation')
+	    ap.add_argument('-ev',dest="event_type",type=str,default="041",nargs="?",help='The type of event')
+	    ap.add_argument('-gsr',dest="gsr_file",type=str,default="./data/all_gsr_warnings.txt",nargs="?",help='The path of gsr event')
+	    ap.add_argument('-wr',dest="warning_file",type=str,default="./data/warning.txt",nargs="?",help='The path of warning')
+	The program will output a xls file as output.
+	The sample file of the gsr_events, warning and report listed in FinanceModel/evaluation/data
+	The sample of output report listed in 
+	Required package for evaluation module: xlwt-0.7.4-py2.7 and munkres-1.0.5.4
+	
 # Finance Model: Bayesian - Time serial model description
 ## 1. Data Structure(sqlite database table used in the model)
 	 t_bloomberg_prices: 

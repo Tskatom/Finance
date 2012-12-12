@@ -7,6 +7,7 @@ import operator
 import hashlib
 import calculator
 import sqlite3 as lite
+import boto
 
 __processor__ = 'bayesian_model'
 log = logs.getLogger(__processor__)
@@ -16,9 +17,14 @@ __version__ = "0.0.1"
 """
 Applying bayesian model to predict the stock flucturation.
 Parameters for bayesian model:
-    ap.add_argument('-c',dest="model_cfg",metavar="MODEL CFG",default="./data/bayesian_model.cfg",type=str,nargs='?',help='the config file')
-    ap.add_argument('-z',dest="port",metavar="ZMQ PORT",default="tcp://*:30115",type=str,nargs="?",help="The zmq port")
-    ap.add_argument('-db',dest="db_file",metavar="Database",type=str,help='The sqlite database file')
+       ap.add_argument('-c',dest="model_cfg",metavar="MODEL CFG",default="./data/bayesian_model.cfg",type=str,nargs='?',help='the config file')
+    ap.add_argument('-tf',dest="trend_file",metavar="TREND RANGE FILE",default="./data/trendRange.json", type=str,nargs='?',help="The trend range file")
+    ap.add_argument('-zw',dest="warning_port",metavar="ZMQ PORT",default="tcp://*:30115",type=str,nargs="?",help="The zmq port")
+    ap.add_argument('-zs',dest="surrogate_port",metavar="ZMQ PORT",default="tcp://*:30115",type=str,nargs="?",help="The zmq port")
+#    ap.add_argument('-db',dest="db_file",metavar="Database",type=str,help='The sqlite database file')
+    ap.add_argument('-kd',dest="key_id",metavar="KeyId for AWS",type=str,help="The key id for aws")
+    ap.add_argument('-sr',dest="secret",metavar="secret key for AWS",type=str,help="The secret key for aws")
+    default_day = datetime.strftime(datetime.now() + timedelta(days =1),"%Y-%m-%d")
     ap.add_argument('-d',dest="predict_date",metavar="PREDICT DATE",type=str,default=default_day,nargs="?",help="The day to be predicted")
     ap.add_argument('-s',dest="stock_list",metavar="Stock List",type=str,nargs="+",help="The list of stock to be predicted")
     ap.add_argument('-rg',dest="rege_date",metavar="Regenerate Date",type=str,help="The date need to be regerated")
@@ -29,6 +35,18 @@ Data flow:
     4> according to the stock predicted trend type, check if it will cause a sigma event (If this is a warning, it will be sent to ZMQ and be stored in table: t_warningmessage )
     
 """
+def query_keywords(domain, start_date,end_date, index):
+
+    eids = set()
+    terms = {}
+    rs = domain.select("SELECT * FROM bloomberg_keywords WHERE date >= '%s' AND date <= '%s' AND stockIndex = '%s'" % (start_date,end_date, index))
+    # you can do order by, but the column must appear in the where clause
+    for r in rs:
+        t = r['term']
+        terms[t] = terms.get(t, 0) + int(r['count'])
+        eids.add(r['embersId'])
+
+    return (terms, eids)
 
 def check_if_tradingday(conn,predictiveDate,stockIndex):
     "Check if the day weekend"
@@ -38,19 +56,46 @@ def check_if_tradingday(conn,predictiveDate,stockIndex):
         return False
     
     "Check if the day is holiday"
-    cur = conn.cursor()
-    sql = "select count(*) from s_holiday a,s_stock_country b where a.country = b.country\
-    and b.stock_index=? and a.date = ?"
-    cur.execute(sql,(stockIndex,predictiveDate))
-    count = cur.fetchone()[0]
+    t_domain = conn.get_domain('s_holiday')
+    sql = "select count(*) from s_holiday where stockIndex = '{}' and date='{}' ".format(stockIndex,predictiveDate)
+    rs = t_domain.select(sql)
+    count = 0
+    for r in rs:
+        count = int(r['Count'])
     if count == 0:
         return True
     else:
         log.info( "%s For %s is Holiday, Just Skip!" %(predictiveDate,stockIndex))
         return False
+    
+def get_past_cluster_list(conn,predict_date,stock_index,duration=3):
+
+    #get the past n days trend type 
+    cluster_types_history = []
+    stock_derived = []
+    table_name = "t_enriched_bloomberg_prices"
+    sql = "select trendType,embersId from {} where postDate < '{}' and name = '{}' order by postDate desc".format(table_name,predict_date,stock_index)
+    en_domain = conn.get_domain(table_name)
+    results = en_domain.select(sql,max_items=duration)
+    for result in results:
+        cluster_types_history.append(result['trendType'])
+        stock_derived.append(result['embersId'])
+    return cluster_types_history, stock_derived
+
+def get_term_list(conn,predict_date,stock_index,duration=3):
+
+    #get the past n day's news
+    "Get past 3 day's news before Predictive Day "
+    predict_date = datetime.strptime(predict_date, "%Y-%m-%d" )
+    start_day = ( predict_date - timedelta( days = duration ) ).strftime( "%Y-%m-%d" )
+    end_day = ( predict_date - timedelta( days = 1 ) ).strftime( "%Y-%m-%d" )
+    "SimpleDB version of get matched key words"
+    key_words_domain = conn.get_domain("bloomberg_keywords")
+    termList,news_derived = query_keywords(key_words_domain, start_day,end_day, stock_index)
+    return termList,news_derived
 
 # calculate the stock index contribution for the coming day
-def compute_stock_index_probability(conn,predict_date, cluster_type , stock_index, duration=3 ):
+def compute_stock_index_probability(conn,predict_date, cluster_type , stock_index, cluster_types_history ):
     try:
         "Get the clusters List"
         cluster_probability = CONFIG["clusterProbability"]
@@ -60,57 +105,20 @@ def compute_stock_index_probability(conn,predict_date, cluster_type , stock_inde
         "Get the contribution of each cluster"
         cluster_contribution_json = CONFIG["clusterContribution"]
         
-        #get the past n days trend type 
-        cluster_types_history = []
-        stock_derived = []
-        cur = conn.cursor()
-        table_name = "t_enriched_bloomberg_prices"
-        sql = "select trend_type,embers_id from {} where post_date < '{}' and name = '{}' order by post_date desc limit {}".format(table_name,predict_date,stock_index,duration)
-        cur.execute(sql)
-        results = cur.fetchall()
-        for result in results:
-            cluster_types_history.append(result[0])
-            stock_derived.append(result[1])
-         
         #computing probability   
         stock_probability = 0
         for key in cluster_contribution_json[stock_index].keys():
             if key == str(cluster_type):
                 "Search from the Cluster contribution Matrix to get the contribution probability"
                 stock_probability = stock_probability + math.log( float( cluster_contribution_json[stock_index][key][int( cluster_types_history[0] ) - 1][2] ) ) + math.log( float( cluster_contribution_json[stock_index][key][int( cluster_types_history[1] ) - 1][1] ) ) + math.log( float( cluster_contribution_json[stock_index][key][int( cluster_types_history[2] ) - 1][0] ) ) + math.log( float( cluster_json[str( cluster_type )] ) )
-        
-        return stock_probability,stock_derived
+        return stock_probability
     except Exception as e:
         log.info( "Error in computing stock index probability: %s" % e.args)
 
 # calculate the stock news contribution for the coming day
-def compute_stock_news_probability(conn,predict_date, cluster_type , stock_index,duraiton=3 ):
+def compute_stock_news_probability(conn,predict_date, cluster_type , stock_index, termList):
     try:
         term_contribution_json = CONFIG["termContribution"]
-        #get the past n day's news
-        "Get past 3 day's news before Predictive Day "
-        predict_date = datetime.strptime(predict_date, "%Y-%m-%d" )
-        start_day = ( predict_date - timedelta( days = 3 ) ).strftime( "%Y-%m-%d" )
-        end_day = ( predict_date - timedelta( days = 1 ) ).strftime( "%Y-%m-%d" )
-        table_name = "t_daily_enrichednews"
-        sqlquery = "select content,embers_id from {} where post_date>='{}' and post_date<='{}' and stock_index='{}'".format(table_name,start_day,end_day,stock_index)
-        cur = conn.cursor()
-        cur.execute(sqlquery)
-        results = cur.fetchall()
-        
-        "Initiate the words List"
-        termList = {}
-        for term in CONFIG["kyewordList"]:
-            termList[term] = 0
-            
-        news_derived = []
-        "Merge all the term in each record"
-        for record in results:
-            jsonRecord = record[0]
-            news_derived.append(record[1])
-            for curWord in jsonRecord:
-                if curWord in termList:
-                    termList[curWord] = termList[curWord] + jsonRecord[curWord]
         
         term_probability = 0
         if stock_index in term_contribution_json:
@@ -121,9 +129,9 @@ def compute_stock_news_probability(conn,predict_date, cluster_type , stock_index
                     for word, count in termList.iteritems():                    
                         if word in stermlist:                        
                             #print word
-                            term_probability =  count * math.log( float( term_contribution_json[stock_index][term_cluster_type][word] ) )
+                            term_probability =  term_probability + count * math.log( float( term_contribution_json[stock_index][term_cluster_type][word] ) )
         
-        return term_probability,news_derived
+        return term_probability
     except IOError:
         log.info( "Can't open the file:stock_raw_data.json.")
     except Exception as e:
@@ -132,38 +140,18 @@ def compute_stock_news_probability(conn,predict_date, cluster_type , stock_index
 
 def insert_surrogatedata(conn,surrogateData):
     try:
-        cur = conn.cursor()
-        
         "If the surrogate data is already in database, do not need to insert"
-        checkSql = "select count(*) from t_surrogatedata where embers_id = ?"
-        embersId = surrogateData["embersId"]
-        cur.execute(checkSql,(embersId,)) 
-        count = cur.fetchone()[0]
-        
+        checkSql = "select count(*) from t_surrogatedata where embers_id = '{}'".format(surrogateData["embersId"])
+        conn.create_domain("t_surrogatedata")
+        t_domain = conn.get_domain("t_surrogatedata")
+        rs = t_domain.select(checkSql)
+        count = 0
+        for r in rs:
+            count = int(r['Count'])
         if count == 0:
-            insertSql = "insert into t_surrogatedata (embers_id,derived_from,shift_date,shift_type,confidence,\
-            strength,location,model,value_spectrum,confidence_isprobability,population,version,comments,description,operate_time) values \
-            (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-            
-            embersId = surrogateData["embersId"]
-            derivedFrom = json.dumps(surrogateData["derivedFrom"])
-            shiftDate = surrogateData["shiftDate"]
-            shiftType = surrogateData["shiftType"]
-            confidence = surrogateData["confidence"]
-            strength = surrogateData["strength"]
-            location = surrogateData["location"]
-            model = surrogateData["model"]
-            valueSpectrum = surrogateData["valueSpectrum"]
-            confidenceIsPrabability = surrogateData["confidenceIsProbability"]
-            population = surrogateData["population"]
-            comments = surrogateData["comments"]
-            description = surrogateData["description"]
-            operateTime = surrogateData["dateProduced"]
-            version = surrogateData["version"]
-            
-            cur.execute(insertSql,(embersId,derivedFrom,shiftDate,shiftType,confidence,strength,location,model,valueSpectrum,confidenceIsPrabability,population,
-                                   version,comments,description,operateTime))
-            conn.commit()
+            "Remove the derivedFrom attribute in message "
+            del(surrogateData["derivedFrom"])
+            t_domain.put_attributes(surrogateData["embersId"], surrogateData)
     except Exception as e:
         log.info( "Error: %s" %e.args[0])
     finally:
@@ -186,11 +174,15 @@ def process_single_stock(conn,predict_date,stock_index,regeFlag=False):
         
         "Iteratively compute the probabilty of each cluster for the stock "
         cluster_pro_list = CONFIG["clusterProbability"][stock_index]
+        
+        term_list,newsDerived = get_term_list(conn, predict_date, stock_index)
+        his_cluster_list,stockDerived = get_past_cluster_list(conn,predict_date,stock_index)
+        
         for cluster_type in cluster_pro_list:
             "compute the contribution of 3 past day's trend "
-            stockIndexProbability,stockDerived = compute_stock_index_probability(conn,predict_date, cluster_type , stock_index )
+            stockIndexProbability = compute_stock_index_probability(conn,predict_date, cluster_type , stock_index, his_cluster_list )
             "compute the contribution of 3 past day's news"
-            newsProbability,newsDerived = compute_stock_news_probability(conn,predict_date, cluster_type , stock_index )
+            newsProbability = compute_stock_news_probability(conn,predict_date, cluster_type , stock_index,term_list )
             "combine two contribution together"
             predictiveProbability = math.exp( stockIndexProbability + newsProbability ) * float( 1e90 )
             predictiveResults[cluster_type] = predictiveProbability
@@ -207,16 +199,16 @@ def process_single_stock(conn,predict_date,stock_index,regeFlag=False):
         "Construct the Surrogate data"
         surrogateData = {}
         "Merge News Derived and Stock Derived"
-        derivedFrom = []
+        derivedFrom = {"derivedIds":[]}
         for item in stockDerived:
-            derivedFrom.append(item)
+            derivedFrom["derivedIds"].append(item)
         for item in newsDerived:
-            derivedFrom.append(item)
+            derivedFrom["derivedIds"].append(item)
         "construct surrogate data"    
         model = 'Bayesian - Time serial Model'
         location = CONFIG["location"][stock_index]
         population = stock_index
-        confidence = sorted_ratio[0][1]
+        confidence = round(sorted_ratio[0][1],2)
         confidenceIsProbability = True
         shiftType = "Trend"
         valueSpectrum = "changePercent"
@@ -247,12 +239,12 @@ def process_single_stock(conn,predict_date,stock_index,regeFlag=False):
         
         "if the action is not for regenerating past warning, then store the surrogate and warning"
         if not regeFlag:
-            "Insert the surrogatedata to sqlite DB"
-            insert_surrogatedata(conn, surrogateData)
-            
             #push surrodate data into ZMQ
-            with queue.open(PORT, 'w', capture=False) as outq:
+            with queue.open(SURROGATE_PORT, 'w', capture=False) as outq:
                 outq.write(surrogateData)
+            
+            "Insert the surrogatedata to Simple DB: "
+            insert_surrogatedata(conn, surrogateData)
         
         return surrogateData
     except Exception as e:
@@ -261,6 +253,13 @@ def process_single_stock(conn,predict_date,stock_index,regeFlag=False):
 
 def dailySigmaTrends(stockIndex,cluster,m30,m90,std30,std90,curValue):
     #computing the bottom and upper line for daily sigma event
+    "get warning threshold"
+    warning_threshold = CONFIG["warning_threshold"]
+    s4Bottom = m30 - warning_threshold[0]*std30
+    s4Upper = m30 + warning_threshold[0]*std30
+    s3Bottom = m90 - warning_threshold[1]*std90
+    s3Upper = m90 + warning_threshold[1]*std90
+    
     s4Bottom = m30 - 4*std30
     s4Upper = m30 + 4*std30
     s3Bottom = m90 - 3*std90
@@ -302,34 +301,18 @@ def dailySigmaTrends(stockIndex,cluster,m30,m90,std30,std90,curValue):
 
 def insert_warningmessage(conn,warningMessage):
     try:
-        cur = conn.cursor()
-        
         "If the warning is already in database, do not need to insert"
-        checkSql = "select count(*) from t_warningmessage where embers_id = ?"
-        embersId = warningMessage["embersId"]
-        cur.execute(checkSql,(embersId,)) 
-        count = cur.fetchone()[0]
-
+        checkSql = "select count(*) from t_warningmessage where embers_id = '{}'".format(warningMessage["embersId"])
+        count = 0
+        conn.create_domain("t_warningmessage")
+        t_domain = conn.get_domain("t_warningmessage")
+        rs = t_domain.select(checkSql)
+        for r in rs:
+            count = int(r['Count'])
         if count == 0:
-            insertSql = "insert into t_warningmessage (embers_id,derived_from,model,event_type,confidence,confidence_isprobability,\
-            event_date,location,population,operate_time,version,comments,description) values (?,?,?,?,?,?,?,?,?,?,?,?,?)"
-            
-            derivedFrom = json.dumps(warningMessage["derivedFrom"])
-            model = warningMessage["model"]
-            eventType =  warningMessage["eventType"]
-            confidence = warningMessage["confidence"]
-            confidenceIsProbability = warningMessage["confidenceIsProbability"] 
-            eventDate = warningMessage["eventDate"]
-            population = warningMessage["population"] 
-            location = warningMessage["location"]
-            comments = warningMessage["comments"]
-            description = warningMessage["description"]
-            operateTime = warningMessage["dateProduced"]
-            version = warningMessage["version"]
-            
-            cur.execute(insertSql,(embersId,derivedFrom,model,eventType,confidence,confidenceIsProbability,eventDate,location,population,
-                                   operateTime,version,comments,description))
-            conn.commit()
+            "Remove the derivedFrom attribute in warningmessage"
+            del(warningMessage["derivedFrom"])
+            t_domain.put_attributes(warningMessage["embersId"], warningMessage)
     except Exception as e:
         log.exception( "insert_warningmessage Error: %s" % e.args[0])
     finally:
@@ -341,30 +324,29 @@ def warning_check(conn,surObj,regeFlag=False):
     stock_index = surObj["population"]
     trend_type = surObj["strength"]
     date = surObj["shiftDate"]
-    cur = conn.cursor()
     
     try:
         pClusster = trend_type
         table_name = "t_enriched_bloomberg_prices"  
+        t_domain = conn.get_domain(table_name)
         
-        sql = "select current_value from {} where name='{}' and post_date < '{}' order by post_date desc limit 1".format(table_name,stock_index,date)
-        cur.execute(sql)
-        result = cur.fetchone()
-        current_val = float(result[0])
+        sql = "select currentValue from {} where name='{}' and postDate < '{}' order by postDate desc".format(table_name,stock_index,date)
+        current_val = 0.0
+        rs = t_domain.select(sql,max_items=1)
+        for r in rs:
+            current_val = float(r['currentValue'])
         
-        querySql = "select one_day_change from {} where name='{}' and post_date <'{}' order by post_date desc limit 30 ".format(table_name,stock_index,date)
-        cur.execute(querySql)
-        rows = cur.fetchall()
+        querySql = "select oneDayChange from {} where name='{}' and postDate <'{}' order by postDate desc".format(table_name,stock_index,date)
+        rs = t_domain.select(querySql,max_items=30)
         moving30 = []
-        for row in rows:
-            moving30.append(row[0])
-        
-        querySql = "select one_day_change from {} where name='{}' and post_date <'{}' order by post_date desc limit 90 ".format(table_name,stock_index,date)
-        cur.execute(querySql)
-        rows = cur.fetchall()
+        for r in rs:
+            moving30.append(float(r['oneDayChange']))
+            
+        querySql = "select oneDayChange from {} where name='{}' and postDate <'{}' order by postDate desc".format(table_name,stock_index,date)
+        rs = t_domain.select(querySql,max_items=90)
         moving90 = []
-        for row in rows:
-            moving90.append(row[0])
+        for r in rs:
+            moving90.append(float(r['oneDayChange']))
         
         m30 = sum(moving30)/len(moving30)
         m90 = sum(moving90)/len(moving90)
@@ -381,7 +363,7 @@ def warning_check(conn,surObj,regeFlag=False):
         
         "Construct the warning message"
         warningMessage ={}
-        derivedFrom = surObj["embersId"]
+        derivedFrom = {"derivedIds":[surObj["embersId"]]}
         model = surObj["model"]
         event = eventType
         confidence = surObj["confidence"]
@@ -411,6 +393,11 @@ def warning_check(conn,surObj,regeFlag=False):
         warningMessage["embersId"] = embersId
         
         if not regeFlag:
+            if eventType != "0000":
+                "Push warningmessage to ZMQ"
+                with queue.open(WARNING_PORT, 'w', capture=False) as outq:
+                        outq.write(warningMessage)
+                
             insert_warningmessage(conn,warningMessage)
         
         if eventType != "0000":
@@ -424,19 +411,24 @@ def warning_check(conn,surObj,regeFlag=False):
         pass    
 
 def get_predicion_version(conn,rege_date):
-    cur = conn.cursor()
-    sql = "select comments from t_warningmessage where event_date = '{}' limit 1"
-    cur.execute(sql)
-    result = cur.fetchone()
-    return json.loads(result[0])
+    t_domain = conn.get_domain('t_warningmessage')
+    sql = "select comments from t_warningmessage where eventDate = '{}'".format(rege_date)
+    rs = t_domain.select(sql,max_items=1)
+    versionStr = {}
+    for r in rs:
+        versionStr = r['comments']
+    return json.loads(versionStr)
         
      
 def parse_args():
     ap = argparse.ArgumentParser("Apply the bayesian model to predict stock warning")
     ap.add_argument('-c',dest="model_cfg",metavar="MODEL CFG",default="./data/bayesian_model.cfg",type=str,nargs='?',help='the config file')
     ap.add_argument('-tf',dest="trend_file",metavar="TREND RANGE FILE",default="./data/trendRange.json", type=str,nargs='?',help="The trend range file")
-    ap.add_argument('-z',dest="port",metavar="ZMQ PORT",default="tcp://*:30115",type=str,nargs="?",help="The zmq port")
-    ap.add_argument('-db',dest="db_file",metavar="Database",type=str,help='The sqlite database file')
+    ap.add_argument('-zw',dest="warning_port",metavar="ZMQ PORT",default="tcp://*:30115",type=str,nargs="?",help="The zmq port")
+    ap.add_argument('-zs',dest="surrogate_port",metavar="ZMQ PORT",default="tcp://*:30114",type=str,nargs="?",help="The zmq port")
+#    ap.add_argument('-db',dest="db_file",metavar="Database",type=str,help='The sqlite database file')
+    ap.add_argument('-kd',dest="key_id",metavar="KeyId for AWS",type=str,help="The key id for aws")
+    ap.add_argument('-sr',dest="secret",metavar="secret key for AWS",type=str,help="The secret key for aws")
     default_day = datetime.strftime(datetime.now() + timedelta(days =1),"%Y-%m-%d")
     ap.add_argument('-d',dest="predict_date",metavar="PREDICT DATE",type=str,default=default_day,nargs="?",help="The day to be predicted")
     ap.add_argument('-s',dest="stock_list",metavar="Stock List",type=str,nargs="+",help="The list of stock to be predicted")
@@ -444,23 +436,29 @@ def parse_args():
     return ap.parse_args()
 
 def main():
-    global CONFIG,VOCABULARY_FILE,PORT,TREND_FILE,__version__
+    global CONFIG,VOCABULARY_FILE,WARNING_PORT,SURROGATE_PORT,TREND_FILE,__version__,KEY_ID,SECRET
     "Get the input args"
     args = parse_args()
     rege_date = args.rege_date
+    KEY_ID = args.key_id
+    SECRET = args.secret
+    #replace dbconnection to simple DB    
+#   conn = lite.connect(db_file)
+    conn = boto.connect_sdb(KEY_ID,SECRET)
     "if rege_date is not none, it means to regenerate the past day's prediction"
     if not rege_date:
         "Normal predict"
         predict_date = args.predict_date
         model_cfg = args.model_cfg
         TREND_FILE = args.trend_file
-        PORT = args.port
-        db_file = args.db_file
+        WARNING_PORT = args.warning_port
+        SURROGATE_PORT = args.surrogate_port
+        
         stock_list = None
         if args.stock_list:
-            stock_list = json.loads(args.stock_list)
-            
-        conn = lite.connect(db_file)
+            stock_list = args.stock_list
+        
+
         "Get the Latest version of Config Object"
         configObj = json.load(open(model_cfg))
         con_versionNum = max([int(v) for v in configObj.keys()])
@@ -479,21 +477,14 @@ def main():
             surrogate = process_single_stock(conn,predict_date,stock)
             if surrogate:
                 warning = warning_check(conn,surrogate)
-                if warning:
-                    "push warning message to zmq"
-                    with queue.open(PORT, 'w', capture=False) as outq:
-                        outq.write(warning)
     else:
         "regenerate the old prediction"
         model_cfg = args.model_cfg
         TREND_FILE = args.trend_file
-        PORT = args.port
-        db_file = args.db_file
         stock_list = None
         if args.stock_list:
-            stock_list = json.loads(args.stock_list)
+            stock_list = args.stock_list
             
-        conn = lite.connect(db_file)
         "Get the version of Config Object for the indicated prediction"
         versionObj = get_predicion_version(conn,rege_date)
         configVersionNum = versionObj["configVersion"]
@@ -504,23 +495,27 @@ def main():
         
         "Get the Latest version of Trend Range Object"
         clusterTrends = json.load(open(TREND_FILE))
-        CONFIG["trendRange"] = {"version":str(trend_versionNum),"range":clusterTrends[trendVersionNum]}
+        CONFIG["trendRange"] = {"version":str(trendVersionNum),"range":clusterTrends[trendVersionNum]}
         
         if not stock_list:
             stock_list = CONFIG["stocks"]
         
         "Process stock each by each"
         for stock in stock_list:
-            surrogate = process_single_stock(conn,predict_date,stock,True)
+            surrogate = process_single_stock(conn,rege_date,stock,True)
             if surrogate:
                 warning = warning_check(conn,surrogate,True)
+                return warning
         
     if conn:
         conn.close()
         
 CONFIG = {}
-PORT = ""
+WARNING_PORT = ""
+SURROGATE_PORT = ""
 TREND_FILE = ""
+KEY_ID = ""
+SECRET = ""
 
 if __name__ == "__main__":
     main()
