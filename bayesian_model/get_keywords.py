@@ -33,7 +33,7 @@ def query_keywords(domain, start_date,end_date, index):
 
 
 def q2(domain):
-    rs = domain.select("select * from t_enriched_bloomberg_prices where postDate >='2012-12-19'and type= 'currency'")
+    rs = domain.select("select * from s_holiday ",max_items=3)
     for r in rs:
         print r
         

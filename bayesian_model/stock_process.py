@@ -168,7 +168,7 @@ def get_raw_data(conn,operate_date):
     t_domain = get_domain(conn,"bloomberg_prices")
     t_format = "%Y-%m-%d"
     end_date = datetime.strftime(datetime.strptime(operate_date,t_format) + timedelta(days=1),t_format)
-    sql = "select * from bloomberg_prices where date >'{}' and date <'{}' and type = 'stock' order by date asc".format(operate_date,end_date)
+    sql = "select * from bloomberg_prices where date >'{}' and date <'{}' order by date asc".format(operate_date,end_date)
     rs = t_domain.select(sql)
     return rs
 
