@@ -1,0 +1,17 @@
+eclipse.preferences.version=1
+encoding//DataCollecting/BloombergNewsScrape.py=utf-8
+encoding//DataPreprocess/import_historical_stock_v2.py=utf8
+encoding//Model/WarningCreate.py=utf8
+encoding//Model/bloomberg_news_process.py=utf8
+encoding//Model/stock_process.py=utf8
+encoding//Test/get_match_words.py=utf-8
+encoding//Training/CreatingVocabulary.py=utf-8
+encoding//Training/__init__.py=utf-8
+encoding//Training/daily_stock_process.py=utf8
+encoding//Util/BasisServiceClient.py=utf-8
+encoding//bayesian_model/bayesian_model.py=utf-8
+encoding//bayesian_model/bloomberg_news_ingest.py=utf-8
+encoding//bayesian_model/bloomberg_news_process.py=utf8
+encoding//bayesian_model/boil_bloomberg_news_ingest.py=utf-8
+encoding//bayesian_model/initiate_enriched_data.py=utf8
+encoding//bayesian_model/stock_process.py=utf8
