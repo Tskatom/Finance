@@ -3,6 +3,7 @@ encoding//DataPreprocess/import_historical_stock_v2.py=utf8
 encoding//Model/WarningCreate.py=utf8
 encoding//Model/bloomberg_news_process.py=utf8
 encoding//Model/stock_process.py=utf8
+encoding//Test/get_match_words.py=utf-8
 encoding//Training/CreatingVocabulary.py=utf-8
 encoding//Training/__init__.py=utf-8
 encoding//Training/daily_stock_process.py=utf8
