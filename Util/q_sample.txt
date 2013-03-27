@@ -1,0 +1,1 @@
+python query.py -s "2013-02-01" -e "2013-02-28" -t "t_enriched_bloomberg_prices" -sig 1 -gsr "/home/vic/work/data/embers_v.db" 
