@@ -1,0 +1,13 @@
+Venezuela|IBVC|38
+Panamá|BVPSBVPS|25
+Costa Rica|CRSMBCT|20
+
+
+January-2013
+4367|0|Costa Rica|||0411|CRSMBCT|2013-01-09|2013-01-09|Bloomberg
+4368|0|Costa Rica|||0412|CRSMBCT|2013-01-14|2013-01-14|Bloomberg
+4369|0|Costa Rica|||0411|CRSMBCT|2013-01-15|2013-01-15|Bloomberg
+4370|0|Brazil|||0422|BRL|2013-01-28|2013-01-28|Bloomberg
+4371|0|Argentina|||0411|Merval|2013-01-29|2013-01-29|Bloomberg
+4373|0|Panamá|||0411|BVPSBVPS|2013-01-25|2013-01-25|Bloomberg
+
