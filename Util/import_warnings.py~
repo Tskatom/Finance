@@ -33,31 +33,9 @@ def load_warning_file(warn_file):
     with open(warn_file, "r") as w_r:
         for line in w_r:
             warn = eval(line)
-            warnings.append(extract_warning(warn))
+            warnings.append(warn)
 
     return warnings
-
-
-def extract_warning(r):
-    warnId = r["embersId"]
-    population = r["population"]
-    eventCode = r["eventType"]
-    eventDate = r["eventDate"]
-    location = r["location"]
-    "Extract country from location"
-    if location[0] == "[":
-        location = eval(location)
-        country = location[0]
-    else:
-        country = location
-
-    probability = float(r["confidence"])
-
-    if probability > 1.5:
-        probability = probability / 100
-    deliveredDate = r["date"][0:10]
-    warn = {"warnId": warnId, "population": population, "eventCode": eventCode, "eventDate": eventDate, "country": country, "deliveredDate": deliveredDate, "probability": probability}
-    return warn
 
 
 def load_warning_sim():
@@ -66,7 +44,22 @@ def load_warning_sim():
     domain = conn.get_domain("warnings")
     rs = domain.select("select embersId, population,eventType, eventDate,location,confidence,  date from warnings where delivered != 'False' and eventType like '04%'")
     for r in rs:
-        warnings.append(extract_warning(r))
+        warnId = r["embersId"]
+        population = r["population"]
+        eventCode = r["eventType"]
+        eventDate = r["eventDate"]
+        location = r["location"]
+        "Extract country from location"
+        if location[0] == "[":
+            location = eval(location)
+            country = location[0]
+        else:
+            country = location
+        probability = float(r["confidence"])
+        if probability > 1.5:
+            probability = probability / 100
+        deliveredDate = r["date"][0:10]
+        warnings.append({"warnId": warnId, "population": population, "eventCode": eventCode, "eventDate": eventDate, "country": country, "deliveredDate": deliveredDate, "probability": probability})
 
     return warnings
 
