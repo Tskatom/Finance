@@ -20,6 +20,7 @@ def arg_parser():
     ap.add_argument('-s', dest="start_date", help="the start day to evalue", type=str)
     ap.add_argument('-e', dest="end_date", help="the end day to evalue", type=str)
     ap.add_argument('-db', dest="db_file", help="the gsr database file", type=str)
+    ap.add_argument('-event', dest='event_type', help="the event type", type=str)
     return ap.parse_args()
 
 
@@ -156,6 +157,7 @@ def main():
     s_date = args.start_date
     e_date = args.end_date
     db_file = args.db_file
+    event_type = args.event_type
 
     conn = lite.connect(db_file)
     summary_quality = .0
@@ -169,8 +171,12 @@ def main():
     print "\n Country\tGSR\tWarn\tPairs\tQs\tProb\tLT\tprec\trecall"
     print "\n-----------------------------------------------------------------------------\n"
     for country in COUNTRY_LIST:
-        gsrEvents = load_gsr(conn, country, s_date, e_date)
-        warnings = load_warning(conn, country, s_date, e_date)
+        if event_type is not None:
+            gsrEvents = load_gsr(conn, country, s_date, e_date, event_type)
+            warnings = load_warning(conn, country, s_date, e_date, event_type)
+        else:
+            gsrEvents = load_gsr(conn, country, s_date, e_date)
+            warnings = load_warning(conn, country, s_date, e_date)
         summary_events += len(gsrEvents)
         summary_warnings += len(warnings)
         score_matrix, indexes = do_matching(gsrEvents, warnings)
@@ -229,7 +235,7 @@ def main():
         summary_quality /= summary_matched
         summary_leadtime /= summary_matched
     print "-----------------------------------------------------------------------------\n"
-    print "%s\t%d\t%d\t%d\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n" % ("summary".ljust(12), summary_events, summary_warnings, summary_matched, summary_quality, summary_leadtime, summary_probability, summary_precision, summary_recall)
+    print "%s\t%d\t%d\t%d\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n" % ("summary".ljust(12), summary_events, summary_warnings, summary_matched, summary_quality, summary_probability, summary_leadtime, summary_precision, summary_recall)
 
 
 if  __name__ == "__main__":

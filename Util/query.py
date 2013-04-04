@@ -39,6 +39,8 @@ def query(conn, s_date, e_date, t_name, name=None, type=None, sigma=None):
     if type is not None:
         sql = "%s and type = '%s'" % (sql, type)
 
+    print sql
+
     domain = get_domain(conn, t_name)
     rs = domain.select(sql)
     print "\n%s\t%s\t%s\t%s\t%s\t%s" % ("postDate", "Name", "zscore30", "zscore90", "currentValue", "changePercent")
@@ -81,11 +83,14 @@ def main():
     gsr = args.gsr
     sim = args.sim
 
-    if gsr:
+    print args
+
+    if gsr is not None:
         sdb_conn = lite.connect(gsr)
         get_gsr(sdb_conn, s_date, e_date, name, type)
 
-    if sim:
+    if sim is not None:
+        print "-----"
         conn = boto.connect_sdb(KEY, SECRET)
         query(conn, s_date, e_date, t_name, name, type, sigma)
 
