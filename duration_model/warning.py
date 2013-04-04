@@ -24,7 +24,7 @@ class warning():
         self.id_lab = "embersId"
         self.derived_lab = "derivedFrom"
         self.event_type_lab = "eventType"
-        self.comment_lab = "comment"
+        self.comment_lab = "comments"
         self.location_lab = "location"
 
     def send(self, pub_zmq):
