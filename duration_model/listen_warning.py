@@ -6,7 +6,7 @@ __email__ = "tskatom@vt.edu"
 
 
 from etool import logs, queue, args
-
+import json
 
 __processor__ = 'listen_warning'
 logs.getLogger(__processor__)
@@ -27,7 +27,7 @@ def main():
         for m in q_r:
             with open(arg.out, "a") as out_w:
                 print m
-                out_w.write(str(m) + "\n")
+                out_w.write(json.dumps(m) + "\n")
 
 
 if __name__ == "__main__":

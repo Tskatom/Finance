@@ -7,6 +7,7 @@ __email__ = "tskatom@vt.edu"
 
 from etool import args, logs, queue
 import boto
+import json
 
 
 __processor__ = 'test_duration_model'
@@ -33,6 +34,7 @@ if __name__ == "__main__":
     t_domain = conn.get_domain('t_enriched_bloomberg_prices')
 
     rs = get_enriched_prices(t_domain, arg.s_date, arg.e_date)
-    with queue.open(arg.pub, 'w') as q_w:
+    with queue.open(arg.pub, 'w') as q_w, open("surrogate.txt", "w") as s_w:
         for r in rs:
             q_w.write(r)
+            s_w.write(json.dumps(r) + "\n")

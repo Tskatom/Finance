@@ -58,16 +58,14 @@ def checkTradingDay(t_domain, t_date, country):
 
 
 def getTradingDate(conn, post_date, country):
-    event_date = dt.datetime.strptime(post_date, "%Y-%m-%d")
+    event_date = dt.datetime.strptime(post_date, "%Y-%m-%d") + dt.timedelta(days=3)
     t_domain = conn.get_domain('s_holiday')
-
-    i = 3
+    i = 0
     while True:
-        event_date += dt.timedelta(days=i)
         str_date = dt.datetime.strftime(event_date, "%Y-%m-%d")
         if checkTradingDay(t_domain, str_date, country):
             return str_date
-
+        event_date += dt.timedelta(days=1)
         i += 1
         if i > 10:
             raise EmbersException("The duration '%d' between current high-sigma date '%s'  and next one is too long" % (i, post_date))
@@ -115,7 +113,8 @@ def durationProcess(conn, enriched_price, zmq_queue, test_flag=False):
         warn.setEventType(event_type)
         warn.setComments(comment)
         warn.setLocation(country)
-        warn.setDate(post_date)
+        if test_flag:
+            warn.setDate(post_date)
         warn.generateIdDate()
 
         warn.send(zmq_queue)
@@ -124,7 +123,6 @@ def durationProcess(conn, enriched_price, zmq_queue, test_flag=False):
 def main():
     ap = args.get_parser()
     ap.add_argument('--test', action="store_true", help="Test Flag, if contain this argument, it means a test case")
-
     arg = ap.parse_args()
 
     assert arg.sub, 'Need a queue to subscribe to'
@@ -139,7 +137,6 @@ def main():
     with queue.open(arg.sub, 'r') as inq:
         for m in inq:
             try:
-                print m
                 durationProcess(conn, m, arg.pub, test_flag)
             except KeyboardInterrupt:
                 log.info('GOT SIGINT, exiting!')
