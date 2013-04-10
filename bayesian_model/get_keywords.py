@@ -33,7 +33,7 @@ def query_keywords(domain, start_date,end_date, index):
 
 
 def q2(domain):
-    rs = domain.select("select * from warnings where eventType='0411' or eventType='0412' or eventType='0421' or eventType='0422'")
+    rs = domain.select("select * from s_holiday ",max_items=3)
     for r in rs:
         print r
         
@@ -49,10 +49,6 @@ def main():
     
     q2(domain)
 
-    b_prices_domain = conn.get_domain("bloomberg_prices")
-    
-    rs = b_prices_domain.select("select * from t_enriched_bloomberg_prices where postDate='2012-11-01'")
-    for r in rs:
-        print r
+
 if __name__ == "__main__":
     main()

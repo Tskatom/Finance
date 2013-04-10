@@ -234,12 +234,10 @@ def process_single_stock(conn,predict_date,stock_index,regeFlag=False):
         surrogateData["version"] = __version__
         comments = {}
         comments["configVersion"] = CONFIG["version"]
+        comments["model"] = "Bayesian Model"
         surrogateData["comments"] = json.dumps(comments)
         surrogateData["description"] = "Predict the change type of the future day"
-        "Transer From UTC to eastern Time"
-        utc_dt = T_UTC.localize(datetime.utcnow())
-        eas_dt = utc_dt.astimezone(T_EASTERN)
-        surrogateData["dateProduced"] = eas_dt.isoformat()
+        surrogateData["date"] = datetime.utcnow().isoformat()
         
         "Generate Embers Id"
         jsonStr = json.dumps(surrogateData)
@@ -393,7 +391,7 @@ def warning_check(conn,surObj,regeFlag=False):
         warningMessage["location"] = location
         warningMessage["version"] = __version__
         operateTime = datetime.utcnow().isoformat()
-        warningMessage["dateProduced"] = operateTime
+        warningMessage["date"] = operateTime
         comObj["trendVersion"] = CONFIG["trendRange"]["version"]
         warningMessage["comments"] = json.dumps(comObj)
         warningMessage["description"] = "Use Bayesian to predict stock sigma events"
@@ -585,7 +583,10 @@ def main():
         trendVersionNum = versionObj["trendVersion"]
         
         configObj = json.load(open(model_cfg))
-        CONFIG = configObj[configVersionNum]
+        if configVersionNum in configObj:
+            CONFIG = configObj[configVersionNum]
+        else:
+            CONFIG = configObj["1"]
         
         "Get the Latest version of Trend Range Object"
         clusterTrends = json.load(sys.stdin)
