@@ -22,9 +22,9 @@ def parse_args():
     ap.add_argument('-t', dest="table_name", help="table to query", type=str)
     ap.add_argument('-n', dest="name", help="name of the stock or currency", type=str, nargs='?')
     ap.add_argument('-ty', dest="type", help="type of query: index or currency", nargs='?')
-    ap.add_argument('-sig', dest="sigma", help="flag to check if filter sigma events", nargs='?')
+    ap.add_argument('-sig', action='store_true', dest="sigma", help="flag to check if filter sigma events")
     ap.add_argument('-gsr', dest="gsr", help="the gsr db file", type=str, nargs='?')
-    ap.add_argument('-sim', dest="sim", help="flag to check if display simpleDB data", type=str, nargs='?')
+    ap.add_argument('-sim', action='store_true', dest="sim", help="flag to check if display simpleDB data")
     return ap.parse_args()
 
 
@@ -69,7 +69,7 @@ def get_gsr(sdb_conn, s_date, e_date, name=None, type=None):
     cur = sdb_conn. cursor()
     print "\n GSR Events From %s to %s" % (s_date, e_date)
     for row in cur.execute(sql):
-        print "%s\t%s\t%s\t%s" % (row[3], row[2], row[1], row[0])
+        print "%s\t%s\t%s\t%s" % (row[3], row[2].ljust(10), row[1], row[0])
 
 
 def main():
@@ -89,7 +89,7 @@ def main():
         sdb_conn = lite.connect(gsr)
         get_gsr(sdb_conn, s_date, e_date, name, type)
 
-    if sim is not None:
+    if sim:
         print "-----"
         conn = boto.connect_sdb(KEY, SECRET)
         query(conn, s_date, e_date, t_name, name, type, sigma)
