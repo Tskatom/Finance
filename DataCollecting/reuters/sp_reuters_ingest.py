@@ -8,10 +8,10 @@ import sys
 import os
 from bs4 import BeautifulSoup
 import urllib2
-import codecs
-from datetime import datetime
+from datetime import datetime, timedelta
 from etool import logs, args, message
 import shelve
+import json
 
 
 __processor__ = 'lat_reuters_ingest'
@@ -91,7 +91,7 @@ def get_news_by_url(url):
         news.set_posttime(post_time)
 
         #author
-        author = sout.select('meta[name="Author"]')[0]['content'] 
+        author = soup.select('meta[name="Author"]')[0]['content'] 
         news.set_author(author)
 
         #url
@@ -108,54 +108,65 @@ def get_news_by_url(url):
         #content, encoding, id, country, labels
         paragraphs = soup.find(id='resizeableText').find_all('p')
         content = " ".join([unicode(p.text) for p in paragraphs])
+        news.set_content(content)
 
         #encoding
         encoding = 'utf-8'
         news.set_encoding(encoding)
 
-        news = message.add_embers_ids(news)
+        news.news = message.add_embers_ids(news.news)
+
+        return news.news
     except:
-        log.exception("Exceptopn when extracting %s %s" % (url, sys.exec_info()[0]))
-        news = None
+        log.exception("Exceptopn when extracting %s %s" % (url, sys.exc_info()[0]))
+        return None
 
 
 def get_daily_news(post_date, seen_it):
-    print "0000"
     #post_date format: mmddyyyy
-    print "==================="
     daily_url = 'http://lta.reuters.com/news/archive/topNews?date=%s' % (post_date)
-    print daily_url
     try:
-        print daily_url
         soup = BeautifulSoup(urllib2.urlopen(daily_url))
         urls = soup.find("div", "module").find_all('a')
         for url in urls:
             try:
-                print "%s\n" % (url)
                 title = url.text.encode('ascii', 'ignore')
                 real_url = "http://lta.reuters.com%s" % (url['href'])
                 if not seen_it.has_key(title):
-                    seen_it[title] = datetime.utcnow().isoformat()
                     news = get_news_by_url(real_url)
-                    yield news
+                    if news is not None:
+                        seen_it[title] = datetime.utcnow().isoformat()
+                        yield news
             except:
-                log.exception("Error individual url: %s" % (sys.exec_info()[0]))
+                log.exception("Error individual url: %s" % (sys.exc_info()[0]))
                 continue
     except:
-        log.exception("Error When Loading the url list %s %s" % (daily_url, sys.exec_info()[0]))
+        log.exception("Error When Loading the url list %s %s" % (daily_url, sys.exc_info()[0]))
 
 
 def main():
     ap = args.get_parser()
+    ap.add_argument('--s_date', type=str, help="the start date to ingest: format mmddyyyy")
+    ap.add_argument('--e_date', type=str, help="the end of date to ingest: format mmddyyyy")
+    ap.add_argument('--o', type=str, help="the output directory")
     arg = ap.parse_args()
-
     logs.init(arg)
-    print "--"
-    p_date = '04142013'
+    
+    t_format = "%m%d%Y"
+    s_date = datetime.strptime(arg.s_date, t_format)
+    e_date = datetime.strptime(arg.e_date, t_format)
+    d_delta = (e_date - s_date).days
+
     seen_it = shelve.open("reuters_news_seen_it.db")
-    print "==="
-    get_daily_news(p_date, seen_it)
-    print "+++"
+    i = 0
+    while i <= d_delta:
+        day_str = datetime.strftime(s_date + timedelta(days=i), t_format)
+        print "Extracting %s" % (day_str)
+        "write news to day file"
+        with open("%s%s%s_ita_reuters.txt" % (arg.o, os.sep, day_str), 'w') as w:
+            for news in get_daily_news(day_str, seen_it):
+                w.write(json.dumps(news) + "\n")
+        i += 1
 
 
 if __name__ == "__main__":
