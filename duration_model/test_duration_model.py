@@ -8,6 +8,7 @@ __email__ = "tskatom@vt.edu"
 from etool import args, logs, queue
 import boto
 import json
+import math
 
 
 __processor__ = 'test_duration_model'
@@ -36,5 +37,6 @@ if __name__ == "__main__":
     rs = get_enriched_prices(t_domain, arg.s_date, arg.e_date)
     with queue.open(arg.pub, 'w') as q_w, open("surrogate.txt", "w") as s_w:
         for r in rs:
-            q_w.write(r)
-            s_w.write(json.dumps(r) + "\n")
+            if abs(float(r['zscore30'])) >= 4.0 or abs(float(r['zscore90'])) >= 3.0:
+                q_w.write(r)
+                s_w.write(json.dumps(r) + "\n")

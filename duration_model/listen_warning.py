@@ -7,6 +7,7 @@ __email__ = "tskatom@vt.edu"
 
 from etool import logs, queue, args
 import json
+from datetime import datetime
 
 __processor__ = 'listen_warning'
 logs.getLogger(__processor__)
@@ -22,10 +23,11 @@ def main():
 
     logs.init(arg)
     queue.init(arg)
+    out_file = "%sdelatcurrency-warnings-%s" % (arg.out, datetime.strftime(datetime.now(), "%Y-%m-%d-%H-%M-%S"))
 
     with queue.open(arg.sub, 'r') as q_r:
         for m in q_r:
-            with open(arg.out, "a") as out_w:
+            with open(out_file, "a") as out_w:
                 print m
                 out_w.write(json.dumps(m) + "\n")
 
