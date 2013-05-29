@@ -41,10 +41,10 @@ class GSR_Event:
             state = row[5]
             city = row[6]
             event_code = row[7]
-            population = row[9]
+            population = row[8]
             try:
-                event_date = get_time_str(get_date(row[10], gsr_book.datemode))
-                earliest_date = get_time_str(get_date(row[11], gsr_book.datemode))
+                event_date = get_time_str(get_date(row[9], gsr_book.datemode))
+                earliest_date = get_time_str(get_date(row[10], gsr_book.datemode))
             except Exception as e:
                 print "An Error occur when Extracting Date field: ", e.args[0]
                 continue
