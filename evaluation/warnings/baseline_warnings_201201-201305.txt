@@ -1,0 +1,258 @@
+{"confidence": 0.5, "eventType": "0422", "location": "Argentina", "date": "2012-01-23", "embersId": "ba65cf773700bfe7b88b7f468fa4e17f91221ed0", "eventDate": "2012-01-26", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0421", "location": "Argentina", "date": "2012-01-15", "embersId": "b4d3f323c385f64d121e1f5562ca183b1003873e", "eventDate": "2012-01-18", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0422", "location": "Brazil", "date": "2012-01-08", "embersId": "ab3c853f933e2c55b26e4c1d247afaa3846c7fd1", "eventDate": "2012-01-11", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Brazil", "date": "2012-01-10", "embersId": "7164dcae1386069d4a99966fd7e2c43c420c928e", "eventDate": "2012-01-13", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Mexico", "date": "2012-01-22", "embersId": "48e5dd380b08033af86e8a02afb283d3ea47bf07", "eventDate": "2012-01-25", "population": "MEXBOL"}
+{"confidence": 0.5, "eventType": "0422", "location": "Mexico", "date": "2012-01-23", "embersId": "62ff6d1cb868d85214fcb84ea9956b208b694e28", "eventDate": "2012-01-26", "population": "USDMXN"}
+{"confidence": 0.5, "eventType": "0421", "location": "Mexico", "date": "2012-01-17", "embersId": "5cc8b4919b7984d58741dcbcf078eb9c8d757880", "eventDate": "2012-01-20", "population": "USDMXN"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2012-01-08", "embersId": "307a80970d2255a0548438baac1778a899a8c75a", "eventDate": "2012-01-11", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2012-01-15", "embersId": "68fa4e9d662478b1dd34f04345c2270ac20805fd", "eventDate": "2012-01-18", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2012-01-21", "embersId": "e6d6fd73bcc9ab5a289fd70be3ec079ca92ed149", "eventDate": "2012-01-24", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0412", "location": "Venezuela", "date": "2012-01-24", "embersId": "c68c60540a58ff74a4aec6afa0ac5a0fe45ee01b", "eventDate": "2012-01-27", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-01-02", "embersId": "ec62c6a6048d710aec2a3b0bc3829b5d027a8de6", "eventDate": "2012-01-5", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Costa Rica", "date": "2012-01-23", "embersId": "7f9261688c56afd265a92d175c7bf215af098f12", "eventDate": "2012-01-26", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0422", "location": "Costa Rica", "date": "2012-01-20", "embersId": "3322fe0c96551e3dec2eb167529ed91609b24d20", "eventDate": "2012-01-23", "population": "USDCRC"}
+{"confidence": 0.5, "eventType": "0421", "location": "Costa Rica", "date": "2011-12-31", "embersId": "17473e8e50ee4d98c5815645e13f0eb1a94b2278", "eventDate": "2012-01-3", "population": "USDCRC"}
+{"confidence": 0.5, "eventType": "0421", "location": "Colombia", "date": "2012-01-24", "embersId": "8dd82d93d65bb110358f08c5bc5fd60dd79f5b07", "eventDate": "2012-01-27", "population": "USDCOP"}
+{"confidence": 0.5, "eventType": "0412", "location": "Chile", "date": "2012-01-14", "embersId": "44d5b8c80388b0ced87dc4137ddf0989a2c8ef89", "eventDate": "2012-01-17", "population": "CHILE65"}
+{"confidence": 0.5, "eventType": "0411", "location": "Chile", "date": "2012-01-15", "embersId": "25c5ffe8660c83a6b84628d9da8a485a36a8c2e3", "eventDate": "2012-01-18", "population": "CHILE65"}
+{"confidence": 0.5, "eventType": "0421", "location": "Chile", "date": "2012-01-23", "embersId": "011bb3e959d667f906ab39bbdfdced89ed9bddb0", "eventDate": "2012-01-26", "population": "USDCLP"}
+{"confidence": 0.5, "eventType": "0421", "location": "Peru", "date": "2012-01-10", "embersId": "ba98a9022ecf8e8a52b087ad2d02bf7c480635c1", "eventDate": "2012-01-13", "population": "USDPEN"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2012-02-12", "embersId": "a2a790d2b84167f6c456e3c098e151f87566e053", "eventDate": "2012-02-15", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2012-02-24", "embersId": "2dd59a7223543809a6d364fcef45065ab64d85e3", "eventDate": "2012-02-27", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2012-02-07", "embersId": "beac40b148f7b17e122737f3f3ce938e19ca82fc", "eventDate": "2012-02-10", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0412", "location": "Venezuela", "date": "2012-01-31", "embersId": "11ef17d9855fcd45136e1f39a752492daf4dd3c2", "eventDate": "2012-02-3", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-01-29", "embersId": "2aa5a314017ac33172ef66f9359dd5c13fb8fadf", "eventDate": "2012-02-1", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Costa Rica", "date": "2012-02-25", "embersId": "452120e06016c268ca20e35ca3b9bd5182874021", "eventDate": "2012-02-28", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2012-02-20", "embersId": "bb7fd715f2af3b8c2ae97846cce629cbae7c5918", "eventDate": "2012-02-23", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0422", "location": "Costa Rica", "date": "2012-02-13", "embersId": "cc22a4c984fb7c195dad1900c92e6ea7199c2ca1", "eventDate": "2012-02-16", "population": "USDCRC"}
+{"confidence": 0.5, "eventType": "0421", "location": "Costa Rica", "date": "2012-01-30", "embersId": "542863fd0b28104d745100a82b5e077506523a98", "eventDate": "2012-02-2", "population": "USDCRC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2012-03-25", "embersId": "f1cd608e75fdc524162839cd66b5c5f22a199acf", "eventDate": "2012-03-28", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2012-03-16", "embersId": "c6478137043d5dc8e93a47d6b17a2628610d1940", "eventDate": "2012-03-19", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2012-03-20", "embersId": "ed965b7a676a9022cf3fedb3fcd43b89bd5fa64e", "eventDate": "2012-03-23", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0412", "location": "Venezuela", "date": "2012-03-19", "embersId": "e2957c24f5b8d36767f39133291f0ed2e1b4e675", "eventDate": "2012-03-22", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-03-05", "embersId": "c40117a9c1071c64dad36bfc3f6c69c94bc1361d", "eventDate": "2012-03-8", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Costa Rica", "date": "2012-02-28", "embersId": "66011cd1defd75d8c19dc68d427edc5899a200b3", "eventDate": "2012-03-2", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2012-03-03", "embersId": "32d2b554c88b30a99edb4026f65446ca9135c4fe", "eventDate": "2012-03-6", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0422", "location": "Costa Rica", "date": "2012-02-28", "embersId": "b8438564ce44dcc55488315cf44929f9af498297", "eventDate": "2012-03-2", "population": "USDCRC"}
+{"confidence": 0.5, "eventType": "0421", "location": "Costa Rica", "date": "2012-03-02", "embersId": "8c5208689a3b3d922f46ba0808d7d214786312be", "eventDate": "2012-03-5", "population": "USDCRC"}
+{"confidence": 0.5, "eventType": "0422", "location": "Argentina", "date": "2012-03-31", "embersId": "f8277389b471686fe4fc984a8da212846e3754f9", "eventDate": "2012-04-3", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2012-04-21", "embersId": "df7cb60da2e0aed7f97223ffe5d058a966c13c04", "eventDate": "2012-04-24", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2012-04-07", "embersId": "37da0f26dc2658ae716acd11eedd4b65d213942d", "eventDate": "2012-04-10", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2012-04-21", "embersId": "df304172fc167efca0b18d3d5b3be5933c80aab8", "eventDate": "2012-04-24", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-03-30", "embersId": "fc175be52c1a55aa3f9f1250b1994145b82aaede", "eventDate": "2012-04-2", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-04-23", "embersId": "d52d8143cc4905aafa4e9882691f83f64642c215", "eventDate": "2012-04-26", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Costa Rica", "date": "2012-04-01", "embersId": "f5a4877532cfb47fce4a6477f3eca781faf0c267", "eventDate": "2012-04-4", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2012-04-20", "embersId": "7e116110afe97538d35edd2196d49ed9014862a8", "eventDate": "2012-04-23", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0422", "location": "Costa Rica", "date": "2012-03-30", "embersId": "adb5cfe9e54d4bb348c7e0a43d1dd6543dd924ab", "eventDate": "2012-04-2", "population": "USDCRC"}
+{"confidence": 0.5, "eventType": "0421", "location": "Costa Rica", "date": "2012-03-31", "embersId": "d96c88d24f754e94663c04a7ee2c9f24a4ecdf1c", "eventDate": "2012-04-3", "population": "USDCRC"}
+{"confidence": 0.5, "eventType": "0422", "location": "Argentina", "date": "2012-05-21", "embersId": "f8ec423e68351d883cff53379b852b470595ad8c", "eventDate": "2012-05-24", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2012-05-14", "embersId": "c7a4a3661ee0d6db263d995a54e7d25851912d46", "eventDate": "2012-05-17", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2012-05-04", "embersId": "b19f6741222c3d87692e314c966bc053a8373715", "eventDate": "2012-05-7", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-05-19", "embersId": "76e79cc75a8c58b3f4d54b977c8a17daac9e71b1", "eventDate": "2012-05-22", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-05-27", "embersId": "f10a1855afa333b172ddfd87eb4343ed60832df6", "eventDate": "2012-05-30", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-05-20", "embersId": "6a439cadd6427881f62d6d53004bc86cc4cb9097", "eventDate": "2012-05-23", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Costa Rica", "date": "2012-05-18", "embersId": "5049006e83793940aa8d37d396a65291aaf579ce", "eventDate": "2012-05-21", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2012-05-18", "embersId": "cb31ebbfb54bc418285f0fbe6e883cdde168eec5", "eventDate": "2012-05-21", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0422", "location": "Costa Rica", "date": "2012-04-28", "embersId": "8a31faea0dec7e7cf6ed310aa754dfbae1e8d75a", "eventDate": "2012-05-1", "population": "USDCRC"}
+{"confidence": 0.5, "eventType": "0422", "location": "Peru", "date": "2012-04-30", "embersId": "64337cd711b1c082c64b80e8ea9851699ec42e28", "eventDate": "2012-05-3", "population": "USDPEN"}
+{"confidence": 0.5, "eventType": "0421", "location": "Peru", "date": "2012-05-05", "embersId": "f1340907e9143f915cd7d7c9036b0fd0d7bea0ff", "eventDate": "2012-05-8", "population": "USDPEN"}
+{"confidence": 0.5, "eventType": "0411", "location": "Argentina", "date": "2012-06-01", "embersId": "4f6700c682243a007a4e098e5f82f0fb3450a9e2", "eventDate": "2012-06-4", "population": "MERVAL"}
+{"confidence": 0.5, "eventType": "0422", "location": "Argentina", "date": "2012-06-02", "embersId": "a73af929e2dc05a884fe8e166a81ef1f305bf283", "eventDate": "2012-06-5", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0422", "location": "Brazil", "date": "2012-06-08", "embersId": "76549dc969dc89429b23c3c68dd8caa9a4721ee3", "eventDate": "2012-06-11", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Brazil", "date": "2012-06-16", "embersId": "38483732248a5e51883ee2bf86f121ca7345fcc0", "eventDate": "2012-06-19", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Mexico", "date": "2012-06-04", "embersId": "ed615637c4d77cf6b54d323a45e7a6164a1858b6", "eventDate": "2012-06-7", "population": "MEXBOL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2012-06-25", "embersId": "cdc8bfeb340f99fe66ceb2d0cc6f119373b2064f", "eventDate": "2012-06-28", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2012-06-23", "embersId": "a2027bcee413c1ac0434aef00723354184227047", "eventDate": "2012-06-26", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0412", "location": "Venezuela", "date": "2012-06-09", "embersId": "84685dc28d6a532dfb842f841aa29bfb6e3b5750", "eventDate": "2012-06-12", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-06-02", "embersId": "74c1584d937a6190a223ff9edac4b00f2b1ebee8", "eventDate": "2012-06-5", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-06-12", "embersId": "887567ff368b426036a79a3cfc15928db0dfd0e2", "eventDate": "2012-06-15", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-06-01", "embersId": "de37fa0f88ce6a7ebe9b6fc2dc2b4d649c2a5a64", "eventDate": "2012-06-4", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2012-06-19", "embersId": "e12a75a4f476b0b2cbea9d1c63b19d88a5700139", "eventDate": "2012-06-22", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0412", "location": "Colombia", "date": "2012-06-10", "embersId": "49669544d2925bb7d6e99cbbb00c6f446f343f06", "eventDate": "2012-06-13", "population": "COLCAP"}
+{"confidence": 0.5, "eventType": "0412", "location": "Chile", "date": "2012-06-02", "embersId": "bf9f9b3e9e05b4c4b1afc2741deea989e4d4693e", "eventDate": "2012-06-5", "population": "CHILE65"}
+{"confidence": 0.5, "eventType": "0412", "location": "Peru", "date": "2012-06-02", "embersId": "44b7e2f2aa2a2f8abe25e4ef73a21f562a102d45", "eventDate": "2012-06-5", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0422", "location": "Peru", "date": "2012-06-23", "embersId": "d1bf9831a4b7059598e84adacf90c7085212e918", "eventDate": "2012-06-26", "population": "USDPEN"}
+{"confidence": 0.5, "eventType": "0421", "location": "Peru", "date": "2012-06-01", "embersId": "7be488d910934cce091e50c8cb89b32a5da5d658", "eventDate": "2012-06-4", "population": "USDPEN"}
+{"confidence": 0.5, "eventType": "0411", "location": "Argentina", "date": "2012-07-28", "embersId": "658ff1772ba490375d969e84ac9ea9d1d38b12be", "eventDate": "2012-07-31", "population": "MERVAL"}
+{"confidence": 0.5, "eventType": "0422", "location": "Argentina", "date": "2012-07-13", "embersId": "b2064c6d90aa6f11bc393487e1b6a6f3734e4439", "eventDate": "2012-07-16", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0421", "location": "Argentina", "date": "2012-07-09", "embersId": "fbf6807b6682ca80899081d7b51be981bc1f4016", "eventDate": "2012-07-12", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0422", "location": "Brazil", "date": "2012-07-21", "embersId": "57444c50fd4144f65a64b37ed218d7705c6bd411", "eventDate": "2012-07-24", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Brazil", "date": "2012-07-27", "embersId": "302f5e95b6b7ae3eea1fc1d80d9c390ff1fa6ba4", "eventDate": "2012-07-30", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Mexico", "date": "2012-07-16", "embersId": "42bfc7be83ec96e3d921ea8b8f74e10dd14ea26f", "eventDate": "2012-07-19", "population": "MEXBOL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2012-07-10", "embersId": "422d5124bce71053f0c9da66549a59da5e0be214", "eventDate": "2012-07-13", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2012-07-02", "embersId": "0f402417a192e69e6db8e69cd43fb12a7c75f929", "eventDate": "2012-07-5", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0412", "location": "Venezuela", "date": "2012-07-08", "embersId": "0a8eb1edea5fc0845eb5e3d6c21e2f8e201efa8c", "eventDate": "2012-07-11", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-07-07", "embersId": "0f48ae3a040faffcf4c4bbce991bd4eb0577dc74", "eventDate": "2012-07-10", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-07-28", "embersId": "46595954abf687176d09a1f28d411aec90a6a357", "eventDate": "2012-07-31", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2012-07-01", "embersId": "7351e94c07850dc5a15fffbce36f8a56e322985d", "eventDate": "2012-07-4", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0412", "location": "Colombia", "date": "2012-07-02", "embersId": "419042c4adc442652782faa2ae9a96eeeeba588a", "eventDate": "2012-07-5", "population": "COLCAP"}
+{"confidence": 0.5, "eventType": "0422", "location": "Colombia", "date": "2012-07-02", "embersId": "602b6f8027f22321ff3a012e11599557da6330e9", "eventDate": "2012-07-5", "population": "USDCOP"}
+{"confidence": 0.5, "eventType": "0412", "location": "Chile", "date": "2012-07-23", "embersId": "4adb12c1237915fc9faa350e076e3205cc60c0e1", "eventDate": "2012-07-26", "population": "CHILE65"}
+{"confidence": 0.5, "eventType": "0411", "location": "Chile", "date": "2012-07-06", "embersId": "66f221e7958324f3bf6e39424f9a37c416acf8e5", "eventDate": "2012-07-9", "population": "CHILE65"}
+{"confidence": 0.5, "eventType": "0422", "location": "Chile", "date": "2012-07-09", "embersId": "53e9e7943ca5ae1b9468b5f9cd7e5aa98a051bfe", "eventDate": "2012-07-12", "population": "USDCLP"}
+{"confidence": 0.5, "eventType": "0412", "location": "Peru", "date": "2012-07-24", "embersId": "42b5fb212fa0770a77d32ac82bbed01f83dc2815", "eventDate": "2012-07-27", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0422", "location": "Peru", "date": "2012-07-08", "embersId": "8afdf00ec6542ba41de3acc5a92556afabf51cbe", "eventDate": "2012-07-11", "population": "USDPEN"}
+{"confidence": 0.5, "eventType": "0421", "location": "Peru", "date": "2012-07-21", "embersId": "5d727a73bdbd0a0fea6924776bb01ba21d4585aa", "eventDate": "2012-07-24", "population": "USDPEN"}
+{"confidence": 0.5, "eventType": "0411", "location": "Argentina", "date": "2012-08-28", "embersId": "a44c27bfb41d319286fc1a8c099641be53114e3e", "eventDate": "2012-08-31", "population": "MERVAL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Argentina", "date": "2012-08-10", "embersId": "15a50b194dd7c044f82eab3cee9c6ab653ea07b1", "eventDate": "2012-08-13", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Brazil", "date": "2012-08-17", "embersId": "926dfb4478eab3e46d73203c1286d0231cd95aeb", "eventDate": "2012-08-20", "population": "IBOV"}
+{"confidence": 0.5, "eventType": "0422", "location": "Brazil", "date": "2012-08-27", "embersId": "5cdd4577db3248979c2501922d37f74da755d3d4", "eventDate": "2012-08-30", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Brazil", "date": "2012-08-19", "embersId": "929491a89eb4e6b98690fc566e5d434a193307c7", "eventDate": "2012-08-22", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Mexico", "date": "2012-08-26", "embersId": "ee621cd06b63b47d4b75a8d70d0d51473b8e9f24", "eventDate": "2012-08-29", "population": "MEXBOL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2012-08-19", "embersId": "8b6a86757ac81dbb9dad9228d93bbb94e079c34d", "eventDate": "2012-08-22", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2012-08-12", "embersId": "d5a617d1351da1ff67866b117e9fad3b3ee78cba", "eventDate": "2012-08-15", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0412", "location": "Venezuela", "date": "2012-08-17", "embersId": "fdee60fd111929f7604605698c7095b78892735a", "eventDate": "2012-08-20", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-08-11", "embersId": "5029ef8aad0485621dbf6a2e36a10d5be3da7c8d", "eventDate": "2012-08-14", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2012-08-17", "embersId": "262b93f90494a60397fe6daab437365918c06659", "eventDate": "2012-08-20", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0412", "location": "Colombia", "date": "2012-08-28", "embersId": "0373ba7dca282d7ad3c93f39127ae9c67a6eb1c4", "eventDate": "2012-08-31", "population": "COLCAP"}
+{"confidence": 0.5, "eventType": "0422", "location": "Colombia", "date": "2012-08-10", "embersId": "6a223c05e770bd788f23e805ebf2f9976125de46", "eventDate": "2012-08-13", "population": "USDCOP"}
+{"confidence": 0.5, "eventType": "0412", "location": "Chile", "date": "2012-08-18", "embersId": "3527d5b8dafe09eb00e39918c4ab7cb099d2f00f", "eventDate": "2012-08-21", "population": "CHILE65"}
+{"confidence": 0.5, "eventType": "0411", "location": "Chile", "date": "2012-08-20", "embersId": "f69abcf53a7c988623b47df642caaf0ee69c32eb", "eventDate": "2012-08-23", "population": "CHILE65"}
+{"confidence": 0.5, "eventType": "0422", "location": "Chile", "date": "2012-08-20", "embersId": "ef3d40b07ba7e979df5bc2197e7be271a2523ac9", "eventDate": "2012-08-23", "population": "USDCLP"}
+{"confidence": 0.5, "eventType": "0412", "location": "Peru", "date": "2012-07-29", "embersId": "f3b355546075c75ba96f7f5c92c3347fe79d5b7a", "eventDate": "2012-08-1", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0422", "location": "Peru", "date": "2012-08-17", "embersId": "a3860b4d7a6631efaaeb2e617563a53cccfa7561", "eventDate": "2012-08-20", "population": "USDPEN"}
+{"confidence": 0.5, "eventType": "0421", "location": "Peru", "date": "2012-08-20", "embersId": "a6a6efaf10fa1fb59dc87b19b9943e1ead2d8280", "eventDate": "2012-08-23", "population": "USDPEN"}
+{"confidence": 0.5, "eventType": "0411", "location": "Argentina", "date": "2012-09-07", "embersId": "3829b33da3abfdcce840f5ff21425db6747e076a", "eventDate": "2012-09-10", "population": "MERVAL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Argentina", "date": "2012-09-09", "embersId": "94ae5155f2de4d058785e5822152279d1aeddacd", "eventDate": "2012-09-12", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Brazil", "date": "2012-09-09", "embersId": "e4df9707984f1cd943d16fcbe25a5c5103af138a", "eventDate": "2012-09-12", "population": "IBOV"}
+{"confidence": 0.5, "eventType": "0422", "location": "Brazil", "date": "2012-09-23", "embersId": "c669cf4371aa24973b8d4c7aaa3468234d3b94db", "eventDate": "2012-09-26", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Brazil", "date": "2012-09-25", "embersId": "7273d416a16b93ac6fc5ce6c6bab4b95975b4c6d", "eventDate": "2012-09-28", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Mexico", "date": "2012-09-16", "embersId": "e61057f8df50d5f2a23df91cc84d6991b872e961", "eventDate": "2012-09-19", "population": "MEXBOL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2012-09-03", "embersId": "828753563558f32c5f356eb1321715ff774ff340", "eventDate": "2012-09-6", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2012-09-18", "embersId": "2b798e536498318ab0c007fab1f9573090d7170d", "eventDate": "2012-09-21", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0412", "location": "Venezuela", "date": "2012-09-16", "embersId": "c9bf227fca8c5da9fb2f3353675bdf53ce07c4d4", "eventDate": "2012-09-19", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-09-18", "embersId": "d5690a0c45e6b5ce5fa3213f7081ba08f82f6712", "eventDate": "2012-09-21", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2012-09-03", "embersId": "c32698df1f4718e47ec89fc568221c7f4de5ba18", "eventDate": "2012-09-6", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0412", "location": "Colombia", "date": "2012-09-07", "embersId": "e12efdbfe4aebf855b52e7cd06c785d447fca50a", "eventDate": "2012-09-10", "population": "COLCAP"}
+{"confidence": 0.5, "eventType": "0422", "location": "Colombia", "date": "2012-09-07", "embersId": "b7969152b85576a1393a5f27d099d020719013ee", "eventDate": "2012-09-10", "population": "USDCOP"}
+{"confidence": 0.5, "eventType": "0412", "location": "Chile", "date": "2012-09-10", "embersId": "870fdd731964ed6bf2ea451c6d2f30d9636ec3bb", "eventDate": "2012-09-13", "population": "CHILE65"}
+{"confidence": 0.5, "eventType": "0411", "location": "Chile", "date": "2012-09-11", "embersId": "e2305cb4bb24738e0684c1001225f0621ed2a16a", "eventDate": "2012-09-14", "population": "CHILE65"}
+{"confidence": 0.5, "eventType": "0422", "location": "Chile", "date": "2012-09-25", "embersId": "8427c40194e1f37bb5bd2a8079c9890ebffe4c52", "eventDate": "2012-09-28", "population": "USDCLP"}
+{"confidence": 0.5, "eventType": "0412", "location": "Peru", "date": "2012-09-03", "embersId": "7f5b450483482a21aaebc570386979ef249e5960", "eventDate": "2012-09-6", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0422", "location": "Peru", "date": "2012-09-22", "embersId": "14a5a809558538712789ecf3d370cbd02a348177", "eventDate": "2012-09-25", "population": "USDPEN"}
+{"confidence": 0.5, "eventType": "0421", "location": "Peru", "date": "2012-09-08", "embersId": "bcb8478980f368535ca084d2907571c5f5212d69", "eventDate": "2012-09-11", "population": "USDPEN"}
+{"confidence": 0.5, "eventType": "0421", "location": "Argentina", "date": "2012-10-19", "embersId": "8ee6e3ec1f1f0e134af6b4db90bb07c306b059a0", "eventDate": "2012-10-22", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Brazil", "date": "2012-10-22", "embersId": "5a8589bafcaafb57d904dcff4d87cb39debdaf1f", "eventDate": "2012-10-25", "population": "IBOV"}
+{"confidence": 0.5, "eventType": "0422", "location": "Brazil", "date": "2012-10-07", "embersId": "5bbaafe23fedea799e07359a82e8a7a9f02a8411", "eventDate": "2012-10-10", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2012-10-26", "embersId": "31f6f1d0369001b7ba590334a21c227eb93c5677", "eventDate": "2012-10-29", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2012-10-05", "embersId": "790325f896856a05b00cd27af4eea8e363e9e8e1", "eventDate": "2012-10-8", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-10-27", "embersId": "464732cba78d48c6dc28268f4fad54a91220bd2c", "eventDate": "2012-10-30", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2012-09-30", "embersId": "a7f854e537c6f57d3947364d9c4a359b04ab072a", "eventDate": "2012-10-3", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0412", "location": "Colombia", "date": "2012-10-15", "embersId": "ab7645f6ad1483fe08061098e52f7ed6f510793a", "eventDate": "2012-10-18", "population": "COLCAP"}
+{"confidence": 0.5, "eventType": "0422", "location": "Colombia", "date": "2012-10-21", "embersId": "788c22e41fb0d1ea5d58f3fc0585110a91403d3a", "eventDate": "2012-10-24", "population": "USDCOP"}
+{"confidence": 0.5, "eventType": "0412", "location": "Chile", "date": "2012-10-05", "embersId": "08fcaf2c30834841c3523ed6e7d7c016336bb198", "eventDate": "2012-10-8", "population": "CHILE65"}
+{"confidence": 0.5, "eventType": "0411", "location": "Chile", "date": "2012-09-29", "embersId": "0131b4b0e8451470ecebd6c9692009c56d7b4549", "eventDate": "2012-10-2", "population": "CHILE65"}
+{"confidence": 0.5, "eventType": "0422", "location": "Chile", "date": "2012-10-22", "embersId": "f7775e15499d9d876413c77007ff30d4388d7915", "eventDate": "2012-10-25", "population": "USDCLP"}
+{"confidence": 0.5, "eventType": "0411", "location": "Peru", "date": "2012-10-06", "embersId": "7177ae46e01eac16d9ed4982347a5d44f678bd8d", "eventDate": "2012-10-9", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0422", "location": "Peru", "date": "2012-09-29", "embersId": "1391aec072c9b9ef19adf84a2e5e6165dcde906c", "eventDate": "2012-10-2", "population": "USDPEN"}
+{"confidence": 0.5, "eventType": "0421", "location": "Peru", "date": "2012-10-07", "embersId": "479d89148aea24e68a6588a0fdde2f40224aee18", "eventDate": "2012-10-10", "population": "USDPEN"}
+{"confidence": 0.5, "eventType": "0422", "location": "Argentina", "date": "2012-10-30", "embersId": "dccecfd3719701d8c8f05e775e0fee534d7d59ae", "eventDate": "2012-11-2", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0421", "location": "Argentina", "date": "2012-11-16", "embersId": "29746db8ff3557a8ad94e9c3e19f732b96e7f765", "eventDate": "2012-11-19", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Brazil", "date": "2012-11-16", "embersId": "b618d65815a5ef0be5946a9d2bacee6e6505780b", "eventDate": "2012-11-19", "population": "IBOV"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2012-10-30", "embersId": "35250315150bfdb0fdc8227377fbe3f1ddce7115", "eventDate": "2012-11-2", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0412", "location": "Venezuela", "date": "2012-11-09", "embersId": "ec36dccd437b59cc3e2be37d5c0513767b57cafc", "eventDate": "2012-11-12", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-11-09", "embersId": "c7916f4e3bb68fe76c5b7e858cebd2f74236b8a2", "eventDate": "2012-11-12", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-10-29", "embersId": "d3c4e470d85b6117a9a32115167d299f4174bdb1", "eventDate": "2012-11-1", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Chile", "date": "2012-11-13", "embersId": "cce0299593502b184678537afd6d688e838578b4", "eventDate": "2012-11-16", "population": "CHILE65"}
+{"confidence": 0.5, "eventType": "0411", "location": "Peru", "date": "2012-11-23", "embersId": "1f26df72807c9ba49ef809de3e7aa90ef40c3246", "eventDate": "2012-11-26", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Peru", "date": "2012-11-12", "embersId": "79f8426ff39322ea13c725c0bd778cc67f4b2c1d", "eventDate": "2012-11-15", "population": "USDPEN"}
+{"confidence": 0.5, "eventType": "0411", "location": "Argentina", "date": "2012-12-16", "embersId": "7e9540d9648efc8acfec47fc0a06f8074d14b305", "eventDate": "2012-12-19", "population": "MERVAL"}
+{"confidence": 0.5, "eventType": "0422", "location": "Argentina", "date": "2012-12-25", "embersId": "7608482ef2409b8c09c56cb5050e97fcbd00f8d4", "eventDate": "2012-12-28", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0421", "location": "Argentina", "date": "2012-12-15", "embersId": "e6a64acaee7735771acedb0a7fc119d3f7a0d031", "eventDate": "2012-12-18", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0422", "location": "Brazil", "date": "2012-12-07", "embersId": "8406bce410c583b847569253531cfe0619e99d4e", "eventDate": "2012-12-10", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Brazil", "date": "2012-12-17", "embersId": "b53799079f27b569c895879e6c1d056c425f71c9", "eventDate": "2012-12-20", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2012-12-10", "embersId": "5a631ca47f368f3789c684ea95a96b9d396ca1e5", "eventDate": "2012-12-13", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2012-12-16", "embersId": "04194df2b24a13f4b5b4991e36af3802861f47a0", "eventDate": "2012-12-19", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0412", "location": "Venezuela", "date": "2012-12-10", "embersId": "2b4034d573bfa5e3c376a8ccadd5c073aa38aa3e", "eventDate": "2012-12-13", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-12-17", "embersId": "0688ec41af686d18c50956105e34bcd238bc5c58", "eventDate": "2012-12-20", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2012-12-07", "embersId": "889b92968b5217a91d2a1a5b9eaa8cf4cd6c0c31", "eventDate": "2012-12-10", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Colombia", "date": "2012-12-10", "embersId": "a71060f2c6e031f12b7d8bdc29274d1e4d25a4e5", "eventDate": "2012-12-13", "population": "COLCAP"}
+{"confidence": 0.5, "eventType": "0422", "location": "Colombia", "date": "2012-12-03", "embersId": "b1ead98c1c34982094832877f637313a3077a66a", "eventDate": "2012-12-6", "population": "USDCOP"}
+{"confidence": 0.5, "eventType": "0412", "location": "Peru", "date": "2012-12-23", "embersId": "2911b7a31601e8b6250add0eec81a28a45f46073", "eventDate": "2012-12-26", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0411", "location": "Peru", "date": "2012-12-02", "embersId": "31d578586039e7e06e32558ff202891b475f3c1b", "eventDate": "2012-12-5", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0411", "location": "Argentina", "date": "2013-01-08", "embersId": "004bc8b50e69c7ca4bbeee883683e42f2016bcea", "eventDate": "2013-01-11", "population": "MERVAL"}
+{"confidence": 0.5, "eventType": "0422", "location": "Argentina", "date": "2012-12-31", "embersId": "88391387631cea5fd679b18454d3718eb291ee2f", "eventDate": "2013-01-3", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0421", "location": "Argentina", "date": "2012-12-29", "embersId": "bdc043576f52fd6b25c83275d7c43d99ce627e99", "eventDate": "2013-01-1", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0422", "location": "Brazil", "date": "2013-01-11", "embersId": "8c523d0752dc5b6ce4edca3c8d5295ec6576e841", "eventDate": "2013-01-14", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Brazil", "date": "2013-01-13", "embersId": "518f5ca2b166bea11989d87c52b88c5022656234", "eventDate": "2013-01-16", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Mexico", "date": "2013-01-18", "embersId": "26bca1a8eaa16d59216a0e669ea188616a3f9134", "eventDate": "2013-01-21", "population": "USDMXN"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2013-01-04", "embersId": "e6d8f5ec77e12cbe96aff79bfc689c48464652e6", "eventDate": "2013-01-7", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2013-01-06", "embersId": "044dbc19073655ee7bb552169a825b993dd4a083", "eventDate": "2013-01-9", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0412", "location": "Venezuela", "date": "2013-01-04", "embersId": "53a541495ba8c169766fda34c63771e6626dfd20", "eventDate": "2013-01-7", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2013-01-15", "embersId": "8f6f0457edcf958d1aee06b38082ad775e358471", "eventDate": "2013-01-18", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2013-01-13", "embersId": "7da6c062c23536e68ea15947232a8a948e07cc55", "eventDate": "2013-01-16", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0421", "location": "Costa Rica", "date": "2013-01-01", "embersId": "81592588018e24e66f4253d50893d34a34fcace7", "eventDate": "2013-01-4", "population": "USDCRC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Colombia", "date": "2013-01-27", "embersId": "95b5f06036c69197b83efd09b1bf339061190d33", "eventDate": "2013-01-30", "population": "COLCAP"}
+{"confidence": 0.5, "eventType": "0422", "location": "Colombia", "date": "2013-01-18", "embersId": "242ef5be2e955aad8d19d1e5abc0d49750001f12", "eventDate": "2013-01-21", "population": "USDCOP"}
+{"confidence": 0.5, "eventType": "0412", "location": "Peru", "date": "2013-01-07", "embersId": "c99a8bffead36d7e41f746261150ac21ae94e993", "eventDate": "2013-01-10", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0411", "location": "Peru", "date": "2013-01-20", "embersId": "9837efdba8e4efbdb8d0dd176f4ee4e4b79875e4", "eventDate": "2013-01-23", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0411", "location": "Argentina", "date": "2013-02-01", "embersId": "c6bc09aa1a02a35104662f228562ba94d98c4e5a", "eventDate": "2013-02-4", "population": "MERVAL"}
+{"confidence": 0.5, "eventType": "0422", "location": "Argentina", "date": "2013-01-29", "embersId": "a1c3f46d040a798f2591cdb534dcd6ff4c7db510", "eventDate": "2013-02-1", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0421", "location": "Argentina", "date": "2013-02-03", "embersId": "7b81f13d0e6272e423edb056872ac5a64f688811", "eventDate": "2013-02-6", "population": "USDARS"}
+{"confidence": 0.5, "eventType": "0422", "location": "Brazil", "date": "2013-02-11", "embersId": "34120bf071fb9b9fb723709ecb95c4e396db0db0", "eventDate": "2013-02-14", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Brazil", "date": "2013-02-15", "embersId": "45f1fdb7f3232579616a78a95483a0caed684275", "eventDate": "2013-02-18", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Mexico", "date": "2013-02-15", "embersId": "4c425357c095d87629ff0151c1a48194c1fc8495", "eventDate": "2013-02-18", "population": "USDMXN"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2013-02-15", "embersId": "aa92e5cd8d48e737d41919aeae2cbdab115df8d7", "eventDate": "2013-02-18", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2013-02-03", "embersId": "d6b5555edaaf9056afea92a70d85de3bded4644f", "eventDate": "2013-02-6", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0412", "location": "Venezuela", "date": "2013-02-02", "embersId": "00d45561e5c7f30b13ce1ef4e1e66ac580305c44", "eventDate": "2013-02-5", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2013-02-22", "embersId": "219bf98988934450715f8d79e2f22ab47d98a0df", "eventDate": "2013-02-25", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2013-02-19", "embersId": "3fd298a0622c84f49dfc0e1d96a407af54fa1913", "eventDate": "2013-02-22", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Costa Rica", "date": "2013-02-11", "embersId": "0fc3e4696bec65f67ebf0fcf62c4b325de81b3ab", "eventDate": "2013-02-14", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2013-02-15", "embersId": "a34b33550f2d2ae7985e2b081354fdee06c48019", "eventDate": "2013-02-18", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0421", "location": "Costa Rica", "date": "2013-02-09", "embersId": "038ee0e1995a34aaa62d7f9041ce4f3a8408633a", "eventDate": "2013-02-12", "population": "USDCRC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Colombia", "date": "2013-02-17", "embersId": "98f9ead885f8c982aca8bcddb63c22e8f4974312", "eventDate": "2013-02-20", "population": "COLCAP"}
+{"confidence": 0.5, "eventType": "0422", "location": "Colombia", "date": "2013-02-18", "embersId": "48369a754d6907ecaaa3b1d1d51176ed32b6861e", "eventDate": "2013-02-21", "population": "USDCOP"}
+{"confidence": 0.5, "eventType": "0412", "location": "Peru", "date": "2013-02-17", "embersId": "ffc9491d1b3196b8e107d9abff47440a403d4aaf", "eventDate": "2013-02-20", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Argentina", "date": "2013-02-26", "embersId": "d8e8c2f925e3d3fc61c5ab99269a15675cca56fb", "eventDate": "2013-03-1", "population": "MERVAL"}
+{"confidence": 0.5, "eventType": "0411", "location": "Argentina", "date": "2013-03-18", "embersId": "ac23584e04bc9781f01d77b8a2d231d9262b5581", "eventDate": "2013-03-21", "population": "MERVAL"}
+{"confidence": 0.5, "eventType": "0422", "location": "Brazil", "date": "2013-03-23", "embersId": "b524ac9f8a7762389a83f9a80806289d6571ace2", "eventDate": "2013-03-26", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Brazil", "date": "2013-03-01", "embersId": "499400f5f56ac982bd50387f6ba77e86a54b5189", "eventDate": "2013-03-4", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Mexico", "date": "2013-03-08", "embersId": "48a4781c3a205f5cfd7856e63e2e1bcdaaebce62", "eventDate": "2013-03-11", "population": "MEXBOL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Mexico", "date": "2013-03-12", "embersId": "5a12d4d321cc57bb4092021cc5b1edadd4303b31", "eventDate": "2013-03-15", "population": "USDMXN"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2013-03-16", "embersId": "6e5cb7b7ce0dde033db97b714845779f7ef3bd31", "eventDate": "2013-03-19", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2013-03-18", "embersId": "d2c30dd6c39185a3662c30abaf89a4d38551b18f", "eventDate": "2013-03-21", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2013-02-26", "embersId": "bb8d8707caa35c2fa6537f52d4208cdbde957581", "eventDate": "2013-03-1", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Costa Rica", "date": "2013-03-09", "embersId": "3a7fa01c32b63ef5fd12919cb31f4730dce2a151", "eventDate": "2013-03-12", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2013-03-11", "embersId": "fa0af7906d219dee8302ff71367c9f7bbf8356c4", "eventDate": "2013-03-14", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2013-03-02", "embersId": "d269ad4c8a50a8288e91c51949cd56586a00f2b9", "eventDate": "2013-03-5", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0421", "location": "Costa Rica", "date": "2013-03-12", "embersId": "f5d6e527cd3858578636adfc90379baa4690f74c", "eventDate": "2013-03-15", "population": "USDCRC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Colombia", "date": "2013-03-04", "embersId": "5acaf752e7c91b4d7b88ee33b9574fcfe4b18be8", "eventDate": "2013-03-7", "population": "COLCAP"}
+{"confidence": 0.5, "eventType": "0422", "location": "Colombia", "date": "2013-03-16", "embersId": "a5e6cf67613a0712cf752099ee943459bdfd90a2", "eventDate": "2013-03-19", "population": "USDCOP"}
+{"confidence": 0.5, "eventType": "0412", "location": "Chile", "date": "2013-03-22", "embersId": "75f093bc1d81d9bd6c800019e7015c1ec9c5286f", "eventDate": "2013-03-25", "population": "CHILE65"}
+{"confidence": 0.5, "eventType": "0412", "location": "Peru", "date": "2013-03-16", "embersId": "aa4b72c438c0fb3571cee94406265b67b9676f82", "eventDate": "2013-03-19", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0411", "location": "Peru", "date": "2013-03-23", "embersId": "7262881aaafaece335c0dc2a4bd6193f6941f34d", "eventDate": "2013-03-26", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Argentina", "date": "2013-04-06", "embersId": "04ea41cc3951c6874a4abecb1903366018d5f18d", "eventDate": "2013-04-9", "population": "MERVAL"}
+{"confidence": 0.5, "eventType": "0411", "location": "Argentina", "date": "2013-04-21", "embersId": "c1684f334138fecc3086c04a95d65c5d960de7b1", "eventDate": "2013-04-24", "population": "MERVAL"}
+{"confidence": 0.5, "eventType": "0422", "location": "Brazil", "date": "2013-04-09", "embersId": "baaf7d3273e27d0f33080435389656caaf60a8e1", "eventDate": "2013-04-12", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Mexico", "date": "2013-04-07", "embersId": "967fac94b96ea13147fe4c32a1d49b5ef73e5002", "eventDate": "2013-04-10", "population": "MEXBOL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Mexico", "date": "2013-04-06", "embersId": "ff0c89009513a6ed56e67e121b1ce25f3f09781a", "eventDate": "2013-04-9", "population": "USDMXN"}
+{"confidence": 0.5, "eventType": "0412", "location": "Panama", "date": "2013-04-06", "embersId": "049d6438cf08918b1f0d7e44f93aa3146488f863", "eventDate": "2013-04-9", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2013-04-27", "embersId": "559e60f82766d4a2881643052a90834af1f9a3dc", "eventDate": "2013-04-30", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0411", "location": "Venezuela", "date": "2013-03-29", "embersId": "ba842bc3156866ee3ea5907101699a340ced298a", "eventDate": "2013-04-1", "population": "IBVC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Costa Rica", "date": "2013-03-31", "embersId": "0608692ee692645af4a1156a176d27d8746edfdf", "eventDate": "2013-04-3", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2013-04-20", "embersId": "16173924f764bcaccd8398190ee983d04a549b62", "eventDate": "2013-04-23", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2013-04-07", "embersId": "94a28eab8c5f3a5254dd7e27ea1220d14c1897a4", "eventDate": "2013-04-10", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2013-04-12", "embersId": "b6453a516f1b6cab4000b743983d130a21ccd4ca", "eventDate": "2013-04-15", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0421", "location": "Costa Rica", "date": "2013-04-20", "embersId": "edaba68fcffecb27d9c83509a49a36aa1a8c5a0b", "eventDate": "2013-04-23", "population": "USDCRC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Chile", "date": "2013-04-08", "embersId": "0a2f486b11b82140b7946a012101ee24622e569f", "eventDate": "2013-04-11", "population": "CHILE65"}
+{"confidence": 0.5, "eventType": "0411", "location": "Peru", "date": "2013-04-07", "embersId": "cfeedb8b9b1689bbc3f3039ec00064f13f1492db", "eventDate": "2013-04-10", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Argentina", "date": "2013-05-20", "embersId": "6ed304813bac31f7f671aed34f714110ee250452", "eventDate": "2013-05-23", "population": "MERVAL"}
+{"confidence": 0.5, "eventType": "0411", "location": "Argentina", "date": "2013-05-24", "embersId": "443d2dc8dfb09042f5cb9ede6b0d4e56c3879b7d", "eventDate": "2013-05-27", "population": "MERVAL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Brazil", "date": "2013-05-24", "embersId": "9d5e22e34b9c52d491872acfb454c8449467982c", "eventDate": "2013-05-27", "population": "IBOV"}
+{"confidence": 0.5, "eventType": "0422", "location": "Brazil", "date": "2013-05-26", "embersId": "2547d33392a5607a69cd49ece95c7fb892089e63", "eventDate": "2013-05-29", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Brazil", "date": "2013-05-18", "embersId": "eac60af2f1a221782d15d61967861b04ec86d9d8", "eventDate": "2013-05-21", "population": "USDBRL"}
+{"confidence": 0.5, "eventType": "0412", "location": "Mexico", "date": "2013-05-24", "embersId": "b4ba7159d96cd46efe81811a3842d28eaaaa0514", "eventDate": "2013-05-27", "population": "MEXBOL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Mexico", "date": "2013-05-10", "embersId": "271ac01366e220f8c8776794f809bf81c2c23fe2", "eventDate": "2013-05-13", "population": "USDMXN"}
+{"confidence": 0.5, "eventType": "0411", "location": "Panama", "date": "2013-05-28", "embersId": "1710c0edd271923b2a1a8b3eb0735cecff6f899a", "eventDate": "2013-05-31", "population": "BVPSBVPS"}
+{"confidence": 0.5, "eventType": "0412", "location": "Costa Rica", "date": "2013-05-20", "embersId": "ae9045bb1c2c4796d4f6bbed4a79435d604ff3ea", "eventDate": "2013-05-23", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2013-05-13", "embersId": "d7c9514d154fd8f576cde056e2befc62f197c8cd", "eventDate": "2013-05-16", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2013-05-04", "embersId": "3cabd99de792298b115efed5d5a5a5496a6830c4", "eventDate": "2013-05-7", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0411", "location": "Costa Rica", "date": "2013-04-29", "embersId": "0c2f949dbf7980e07d7f342995c3d1a5e5796d1d", "eventDate": "2013-05-2", "population": "CRSMBCT"}
+{"confidence": 0.5, "eventType": "0421", "location": "Costa Rica", "date": "2013-05-03", "embersId": "d68e41859cecf8b5a9cb29d0527652918498b7a6", "eventDate": "2013-05-6", "population": "USDCRC"}
+{"confidence": 0.5, "eventType": "0412", "location": "Colombia", "date": "2013-04-28", "embersId": "7e9a4a2128dd4b4eaa48ee50c4258c39ae5d26ae", "eventDate": "2013-05-1", "population": "COLCAP"}
+{"confidence": 0.5, "eventType": "0421", "location": "Colombia", "date": "2013-05-05", "embersId": "8f2f7a138f4e7dc2fac318dfdb58f6fbdba2df39", "eventDate": "2013-05-8", "population": "USDCOP"}
+{"confidence": 0.5, "eventType": "0412", "location": "Chile", "date": "2013-05-21", "embersId": "ec5258daab1e5fee59937920ea3da176cb8d0645", "eventDate": "2013-05-24", "population": "CHILE65"}
+{"confidence": 0.5, "eventType": "0412", "location": "Peru", "date": "2013-05-10", "embersId": "bd41f27c5668f5bd44c6744f2a6f0468c1b75537", "eventDate": "2013-05-13", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0411", "location": "Peru", "date": "2013-05-24", "embersId": "1688aaaf6fc212d10c0684094864587c99004f0e", "eventDate": "2013-05-27", "population": "IGBVL"}
+{"confidence": 0.5, "eventType": "0421", "location": "Peru", "date": "2013-05-17", "embersId": "cac240e722d8b19f9f8fbe5262339ab67cc0ffda", "eventDate": "2013-05-20", "population": "USDPEN"}

@@ -1,0 +1,41 @@
+HSI 		^HSI	HANG SENG INDEX		
+UKX			FTSE	FTSE 100
+AEX			AEX.AS	AEX General
+CCMP		^IXIC	NASDAQ Composite
+SMI			^SSMI	Swiss Market
+CAC			^FCHI	CAC 40
+SPTSX		^GSPTSE	S&P TSX Composite
+FTSEMIB		FTSEMIB.MI
+AS51		^AXJO
+DAX			^GDAXI	DAX
+SX5E		^STOXX50E
+INDU		^DJI	Dow Jones Industrial Average
+IBEX		^IBEX
+NKY			^N225	Nikkei 225
+OMX			^OMXS30
+
+Download the historical data
+http://ichart.yahoo.com/table.csv?s=^HSI&a=00&b=01&c=2008&d=04&e=24&f=2013&g=d&ignore=.csv
+
+Download the realtime data
+download.finance.yahoo.com/d/quotes.csv?s=^HSI&f=snl1c1p2&e=.csv
+http://finance.yahoo.com/d/quotes.csv?s=BBDB.TO+NT.TO+GE+MSFT&f=snl1d1t1ohgdr 
+
+
+s – 股票名称
+
+a – 起始时间，月
+
+b – 起始时间，日
+
+c – 起始时间，年
+
+d – 结束时间，月
+
+e – 结束时间，日
+
+f – 结束时间，年
+
+g – 时间周期。Example: g=w, 表示周期是’周’。d->’日’(day),w->’周’(week)，m->’月’(mouth)，v->’dividendsonly’
+
+一定注意月份参数，其值比真实数据-1。如需要9月数据，则写为08。
