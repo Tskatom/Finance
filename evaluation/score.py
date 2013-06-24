@@ -12,40 +12,64 @@ import math
 from munkres import Munkres
 
 
-COUNTRY_LIST = ["Chile", "Costa Rica", "Panama", "Venezuela", "Colombia", "Peru", "Mexico", "Argentina", "Brazil"]
+COUNTRY_LIST = ["Chile", "Costa Rica", "Panama", "Venezuela",
+                "Colombia", "Peru", "Mexico", "Argentina", "Brazil"]
+SCORE_WINDOW = 7
 
 
 def arg_parser():
     ap = argparse.ArgumentParser("Score the Warning")
-    ap.add_argument('-s', dest="start_date", help="the start day to evalue", type=str)
-    ap.add_argument('-e', dest="end_date", help="the end day to evalue", type=str)
-    ap.add_argument('-db', dest="db_file", help="the gsr database file", type=str)
-    ap.add_argument('-event', dest='event_type', help="the event type", type=str)
+    ap.add_argument('-s', dest="start_date",
+                    help="the start day to evalue", type=str)
+    ap.add_argument('-e', dest="end_date",
+                    help="the end day to evalue", type=str)
+    ap.add_argument('-db', dest="db_file",
+                    help="the gsr database file", type=str)
+    ap.add_argument('-event', dest='event_type',
+                    help="the event type", type=str)
+    ap.add_argument('-sw', dest='sc_win',
+                    help="the score windows", type=int)
+    ap.add_argument('-model', dest='model',
+                    help="model name", type=str)
+    ap.add_argument('-all', action='store_true',
+                    help='over all performance')
     return ap.parse_args()
 
 
 def load_gsr(conn, country, s_date, e_date, eventType="04"):
     gsrEvents = []
-    sql = "select event_id, country, event_code, population, event_date from gsr_event \
-            where event_date >='%s' and event_date < '%s' and country = '%s' and event_code like '%s' \
-            order by event_id asc" % (s_date, e_date, country, eventType + "%")
+    sql = "select event_id, country, event_code, \
+            population, event_date from gsr_event \
+            where event_date >='%s' and event_date < '%s' \
+            and country = '%s' and event_code like '%s' \
+            order by event_id asc" % (s_date, e_date,
+                                      country, eventType + "%")
 
     cur = conn.cursor()
     for row in cur.execute(sql):
-        gsrEvents.append({"eventId": row[0], "country": row[1], "eventCode": row[2], "population": row[3], "eventDate": row[4]})
+        gsrEvents.append({"eventId": row[0],
+                          "country": row[1], "eventCode": row[2],
+                          "population": row[3], "eventDate": row[4]})
 
     return gsrEvents
 
 
 def load_warning(conn, country, s_date, e_date, eventType="04"):
     warnings = []
-    sql = "select warning_id, country, event_code, population, event_date, deliver_date, probability from warnings \
-            where deliver_date >= '%s' and deliver_date < '%s' and country = '%s' and event_code like '%s' \
-            order by warning_id" % (s_date, e_date, country, eventType + "%")
+    sql = "select warning_id, country, event_code, \
+            population, event_date, deliver_date, \
+            probability from warnings \
+            where deliver_date >= '%s' and deliver_date < '%s' \
+            and country = '%s' and event_code like '%s' \
+            order by warning_id" % (s_date, e_date,
+                                    country, eventType + "%")
 
     cur = conn.cursor()
     for row in cur.execute(sql):
-        warnings.append({"warningId": row[0], "country": row[1], "eventCode": row[2], "population": row[3], "eventDate": row[4], "deliverDate": row[5], "probability": row[6]})
+        warnings.append({"warningId": row[0],
+                         "country": row[1], "eventCode": row[2],
+                         "population": row[3], "eventDate": row[4],
+                         "deliverDate": row[5], "probability": row[6]})
 
     return warnings
 
@@ -76,10 +100,10 @@ def score_date(gsr, warn):
     g_date = datetime.strptime(gsr["eventDate"], "%Y-%m-%d")
     w_date = datetime.strptime(warn["eventDate"], "%Y-%m-%d")
     gaps = math.fabs((g_date - w_date).days)
-    if gaps > 7:
-        gaps = 7
+    if gaps > SCORE_WINDOW:
+        gaps = SCORE_WINDOW
 
-    return 1. - gaps / 7.
+    return 1. - gaps * 1.0 / SCORE_WINDOW
 
 
 def get_quality(gsr, warn):
@@ -111,7 +135,7 @@ def match(gsr, warn):
     if (deliverDate - eventDate).days >= 0:
         return False
 
-    if math.fabs((eventDate - warningDate).days) > 7:
+    if math.fabs((eventDate - warningDate).days) > SCORE_WINDOW:
         return False
 
     return True
@@ -153,11 +177,17 @@ def do_matching(gsrEvents, warnings):
 
 
 def main():
+    global SCORE_WINDOW
     args = arg_parser()
     s_date = args.start_date
     e_date = args.end_date
     db_file = args.db_file
     event_type = args.event_type
+    SCORE_WINDOW = args.sc_win
+
+    out_country_file = "/home/vic/work/Finance/evaluation/country_win_%d_%s_evaluationi.txt" \
+        % (SCORE_WINDOW, args.model)
+    out_cw = open(out_country_file, "a")
 
     conn = lite.connect(db_file)
     summary_quality = .0
@@ -168,7 +198,7 @@ def main():
     summary_events = 0
     summary_warnings = 0
     summary_matched = 0
-    print "\n Country\tGSR\tWarn\tPairs\tQs\tProb\tLT\tprec\trecall"
+    print "\n Country\tGSR\tWarn\tPairs\tQs\tProb\tLT\tprec\trecall\tF-score"
     print "\n-----------------------------------------------------------------------------\n"
     for country in COUNTRY_LIST:
         if event_type is not None:
@@ -223,7 +253,22 @@ def main():
         if len(gsrEvents) != 0:
             country_recall = 1. * len(matchedW) / len(gsrEvents)
 
-        print "%s\t%d\t%d\t%d\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n" % (country.ljust(12), len(gsrEvents), len(warnings), len(matchedW), country_quality, country_probability, country_leadtime, country_precision, country_recall)
+        print "%s\t%d\t%d\t%d\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n" % \
+            (country.ljust(12), len(gsrEvents), len(warnings),
+             len(matchedW), country_quality, country_probability,
+             country_leadtime, country_precision, country_recall,
+             f_score(country_precision, country_recall))
+        if args.all:
+            title = "summary"
+        else:
+            title = s_date[0:7]
+
+        content = "%s|%s\t%d\t%d\t%d\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n" % \
+            (title, country.ljust(12), len(gsrEvents), len(warnings),
+             len(matchedW), country_quality, country_probability,
+             country_leadtime, country_precision, country_recall,
+             f_score(country_precision, country_recall))
+        out_cw.write(content)
 
     "COmputing the Summary information"
     if summary_warnings != 0:
@@ -235,8 +280,35 @@ def main():
         summary_quality /= summary_matched
         summary_leadtime /= summary_matched
     print "-----------------------------------------------------------------------------\n"
-    print "%s\t%d\t%d\t%d\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n" % ("summary".ljust(12), summary_events, summary_warnings, summary_matched, summary_quality, summary_probability, summary_leadtime, summary_precision, summary_recall)
+    print "%s\t%d\t%d\t%d\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n" % \
+        ("summary".ljust(12), summary_events, summary_warnings,
+         summary_matched, summary_quality, summary_probability,
+         summary_leadtime, summary_precision, summary_recall,
+         f_score(summary_precision, summary_recall))
+
+    #out put the result to file
+    out_file = "/home/vic/work/Finance/evaluation/win_%d_%s_evaluation.txt" \
+        % (SCORE_WINDOW, args.model)
+    with open(out_file, "a") as aout:
+        if args.all:
+            title = "summary"
+        else:
+            title = s_date[0:7]
+        aout.write("%s|%d\t%d\t%d\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n"
+                   % (title, summary_events, summary_warnings, summary_matched,
+                      summary_quality, summary_probability,
+                      summary_leadtime, summary_precision, summary_recall,
+                      f_score(summary_precision, summary_recall)))
+
+    out_cw.flush()
+    out_cw.close()
 
 
-if  __name__ == "__main__":
+def f_score(p, r):
+    if p == 0.0 or r == 0.0:
+        return .0
+    return 2 * p * r / (p + r)
+
+
+if __name__ == "__main__":
     main()

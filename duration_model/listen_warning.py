@@ -11,6 +11,19 @@ from datetime import datetime
 
 __processor__ = 'listen_warning'
 logs.getLogger(__processor__)
+SENT_WARNINGS = []
+
+
+def check_ifexist(warning):
+    eventDate = warning["eventDate"]
+    eventType = warning["eventType"]
+    population = warning["population"]
+
+    if [eventDate, eventType, population] in SENT_WARNINGS:
+        return True
+    else:
+        SENT_WARNINGS.append([eventDate, eventType, population])
+        return False
 
 
 def main():
@@ -23,13 +36,15 @@ def main():
 
     logs.init(arg)
     queue.init(arg)
-    out_file = "%sdelatcurrency-warnings-%s" % (arg.out, datetime.strftime(datetime.now(), "%Y-%m-%d-%H-%M-%S"))
+    out_file =  arg.out
 
     with queue.open(arg.sub, 'r') as q_r:
         for m in q_r:
             with open(out_file, "a") as out_w:
-                print m
-                out_w.write(json.dumps(m) + "\n")
+                if not check_ifexist(m):
+                    out_w.write(json.dumps(m) + "\n")
+                else:
+                    print "Duplicated Warnings"
 
 
 if __name__ == "__main__":
