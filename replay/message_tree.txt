@@ -1,0 +1,92 @@
+{
+   "delivered": false, 
+   "confidence": 0.6, 
+   "derivedFrom": {
+      "derivedMessages": [
+         {
+            "postDate": "2013-05-09", 
+            "zscore30": "-3.77487391707", 
+            "zscore90": "-3.76519808396", 
+            "derivedFrom": {
+               "derivedMessages": [
+                  {
+                     "feed": "Bloomberg - Stock Index", 
+                     "currentValue": "3,863.19", 
+                     "name": "MERVAL", 
+                     "queryTime": "2013-05-09T22:45:02.071216+00:00", 
+                     "previousCloseValue": "4,038.23", 
+                     "date": "2013-05-09T21:01:19+00:00", 
+                     "originalUpdateTime": "2013-05-09T21:01:19+00:00", 
+                     "type": "stock", 
+                     "embersId": "fec13829e98859f70bf25f21112ad80fa57575d3"
+                  }
+               ]
+            }, 
+            "trendType": "5", 
+            "operateTime": "2013-05-09T22:45:30.848864", 
+            "currentValue": "3863.19", 
+            "changePercent": "-0.0433", 
+            "name": "MERVAL", 
+            "previousCloseValue": "4038.23", 
+            "oneDayChange": "-175.04", 
+            "type": "stock", 
+            "embersId": "9f8629bde61cabfbed2c8669720ce64df9e6d3ee"
+         }
+      ]
+   }, 
+   "eventType": "0412", 
+   "comments": "Duration analysis Model-Detected High-Sigma Event: 2013-05-09 MERVAL zscore30:-3.7749 zscore90:-3.7652", 
+   "location": "Argentina", 
+   "date": "2013-05-09T22:45:28.096448", 
+   "model": "Duration Analysis Model", 
+   "population": "MERVAL", 
+   "confidenceIsProbability": "True", 
+   "eventDate": "2013-05-13", 
+   "embersId": "2a388f44267b0c5b293010f0f82f9f6c1ab34b42"
+}
+{
+   "delivered": false, 
+   "confidence": 0.6, 
+   "derivedFrom": {
+      "derivedMessages": [
+         {
+            "postDate": "2013-05-10", 
+            "zscore30": "-2.62027871221", 
+            "zscore90": "-3.01382862652", 
+            "derivedFrom": {
+               "derivedMessages": [
+                  {
+                     "feed": "Bloomberg - Stock Index", 
+                     "currentValue": "3,712.51", 
+                     "name": "MERVAL", 
+                     "queryTime": "2013-05-10T22:45:02.445113+00:00", 
+                     "previousCloseValue": "3,863.19", 
+                     "date": "2013-05-10T21:00:48+00:00", 
+                     "originalUpdateTime": "2013-05-10T21:00:48+00:00", 
+                     "type": "stock", 
+                     "embersId": "a961e36b03cdcaf2816530e0712e30d52e81d0ea"
+                  }
+               ]
+            }, 
+            "trendType": "5", 
+            "operateTime": "2013-05-10T22:45:35.809101", 
+            "currentValue": "3712.51", 
+            "changePercent": "-0.039", 
+            "name": "MERVAL", 
+            "previousCloseValue": "3863.19", 
+            "oneDayChange": "-150.68", 
+            "type": "stock", 
+            "embersId": "421a55ebc9f62c87eadde8d5f0886a4aac463f04"
+         }
+      ]
+   }, 
+   "eventType": "0412", 
+   "comments": "Duration analysis Model-Detected High-Sigma Event: 2013-05-10 MERVAL zscore30:-2.6203 zscore90:-3.0138", 
+   "location": "Argentina", 
+   "date": "2013-05-10T22:45:32.678166", 
+   "model": "Duration Analysis Model", 
+   "population": "MERVAL", 
+   "confidenceIsProbability": "True", 
+   "eventDate": "2013-05-13", 
+   "embersId": "2391f3263130218c723020fc7051f431c0d4e82d"
+}
