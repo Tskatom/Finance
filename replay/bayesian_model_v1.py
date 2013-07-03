@@ -484,8 +484,10 @@ def parse_args():
                     type=str,nargs='?',help='the config file')
     ap.add_argument('-zw',dest="warning_port",metavar="ZMQ PORT",default="tcp://*:30115",type=str,nargs="?",help="The zmq port")
     ap.add_argument('-zs',dest="surrogate_port",metavar="ZMQ PORT",default="tcp://*:30114",type=str,nargs="?",help="The zmq port")
-    ap.add_argument('-kd',dest="key_id",metavar="KeyId for AWS",type=str,help="The key id for aws")
-    ap.add_argument('-sr',dest="secret",metavar="secret key for AWS",type=str,help="The secret key for aws")
+    ap.add_argument('-kd',dest="key_id",metavar="KeyId for AWS",
+                    default=os.environ['AWS_ACCESS_KEY_ID'], type=str,help="The key id for aws")
+    ap.add_argument('-sr',dest="secret",metavar="secret key for AWS",
+                    default=os.environ['AWS_SECRET_ACCESS_KEY'], type=str,help="The secret key for aws")
     utc_dt = T_UTC.localize(datetime.utcnow())
     eas_dt = utc_dt.astimezone(T_EASTERN)
     default_day = datetime.strftime(eas_dt + timedelta(days =1),"%Y-%m-%d")

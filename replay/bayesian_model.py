@@ -349,7 +349,6 @@ def warning_check(warningDomain, surObj, regeFlag=False):
     stock_index = surObj["population"]
     trend_type = surObj["strength"]
     date = surObj["shiftDate"]
-    print "population: %s trendType: %s" % (stock_index, trend_type)
 
     try:
         pClusster = trend_type
@@ -420,10 +419,9 @@ def warning_check(warningDomain, surObj, regeFlag=False):
 
         if eventType != "0000":
             "push warningmessage to ZMQ"
-            with queue.open(WARNING_PORT, 'w', capture=False) as outq:
+            with queue.open(WARNING_PORT, 'w', capture=True) as outq:
                 sleep(1)
                 outq.write(warningMessage)
-                print "--------------------------"
         if not regeFlag:
             insert_warningmessage(warningDomain, warningMessage)
         if eventType != "0000":
@@ -617,7 +615,6 @@ def main():
         versionObj = get_predicion_version(warningDomain, rege_date)
         configVersionNum = versionObj["configVersion"]
         trendVersionNum = versionObj["trendVersion"]
-        print "configVersionNum: %s trendVersionNum: %s" % (configVersionNum, trendVersionNum)
 
         configObj = json.load(open(model_cfg))
         if configVersionNum in configObj:
@@ -640,11 +637,9 @@ def main():
 
         if not stock_list:
             stock_list = CONFIG["stocks"]
-        print "stock_list:" , stock_list
 
         "Process stock each by each"
         for stock in stock_list:
-            print "==", stock
             surrogate = process_single_stock(surrogateDomain, rege_date, stock, True)
             if surrogate:
                 warning = warning_check(warningDomain, surrogate, True)
