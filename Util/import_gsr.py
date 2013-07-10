@@ -70,7 +70,7 @@ class GSR_Event:
         for event in self.gsr_events:
             event_id = event["eventId"]
             event_sub_id = event["eventSubId"]
-            country = event["country"]
+            country = event["country"].strip()
             state = event["state"]
             city = event["city"]
             event_code = event["eventCode"]

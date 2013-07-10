@@ -125,7 +125,7 @@ def get_content_byoffset(url, start, end):
     return content
 
 
-def main():
+def bayesian():
     conn_sdb = boto.connect_sdb()
     domain = conn_sdb.lookup("warnings")
 
@@ -136,13 +136,95 @@ def main():
     sql += " model = 'Bayesian - Time serial Model' and date >'2013-05-01' "
 
     rs = domain.select(sql)
-    at_file = "json_audit_trail.txt"
+    at_file = "bayesian_audit_trail.txt"
     atw = codecs.open(at_file, "w")
     for r in rs:
         eid = r["embersId"]
         audit_trail = get_bayesian_trail(domain, main_table, eid)
         j_str = json.dumps(audit_trail)
         atw.write(j_str + "\n")
+    atw.flush()
+    atw.close()
+
+
+def get_duration_trail(domain, eid):
+    sql = "select * from warnings where embersId = '%s' " % eid
+    rs = domain.select(sql)
+    warning = None
+
+    for r in rs:
+        warning = r
+    if warning is None:
+        print "There is no such warning : %s" % eid
+        return
+
+    #get the derived message
+    trig_message = None
+    derivedIds = eval(warning["derivedFrom"])["derivedIds"]
+    for did in derivedIds:
+        sql = "select * from t_enriched_bloomberg_prices "
+        sql += "where embersId = '%s' " % did
+        rs = domain.select(sql)
+        for r in rs:
+            trig_message = r
+
+    # choose proper rule file, if warning
+    # sent before 2013-05-28, choose rule file v1
+    # else choose rule file v2
+    deliver_date = warning["date"][0:10]
+    if deliver_date <= "2013-05-28":
+        r_version = "v3"
+    else:
+        r_version = "v3"
+
+    rule_file = "duration_rule_%s.txt" % r_version
+
+    tar_index = warning["population"]
+    rule = eval(open(rule_file, 'r').read())
+    rule_index = rule["rules"][tar_index].keys()
+    rule_index.append(tar_index)
+    rule_index = set(rule_index)
+
+    rule_message = {}
+    for r_index in rule_index:
+        sql = "select * from t_enriched_bloomberg_prices "
+        sql += "where name='%s' " % r_index
+        sql += " and postDate <= '%s' order by postDate desc " % deliver_date
+        rs = domain.select(sql, max_items=12)
+        rule_message[r_index] = [r for r in rs]
+
+    #construct derivedFrom message
+    derived_from = {}
+    derived_from["0"] = trig_message
+    derived_from[1] = rule_message
+    derived_from["2"] = rule["rules"][tar_index]
+    warning["derived_from"] = []
+    warning["derived_from"].append(derived_from)
+    del warning["derivedFrom"]
+
+    return warning
+
+
+def duration():
+    conn_sdb = boto.connect_sdb()
+    domain = conn_sdb.lookup("warnings")
+    sql = "select embersId from warnings where mitreId > '1' "
+    sql += " and model='Duration Analysis Model'  and date > '2013-05-01' "
+
+    rs = domain.select(sql)
+    at_file = "duration_audit_trail.txt"
+    atw = codecs.open(at_file, 'w')
+    for r in rs:
+        eid = r['embersId']
+        audit_trail = get_duration_trail(domain, eid)
+        atw.write(json.dumps(audit_trail) + "\n")
+    atw.flush()
+    atw.close()
+
+
+def main():
+    duration()
+
 
 if __name__ == "__main__":
     main()

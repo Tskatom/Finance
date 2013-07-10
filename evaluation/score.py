@@ -185,7 +185,7 @@ def main():
     event_type = args.event_type
     SCORE_WINDOW = args.sc_win
 
-    out_country_file = "/home/vic/workspace/Finance/evaluation/country_win_%d_%s_evaluationi.txt" \
+    out_country_file = "/home/vic/work/Finance/evaluation/country_win_%d_%s_evaluationi.txt" \
         % (SCORE_WINDOW, args.model)
     out_cw = open(out_country_file, "a")
 
@@ -287,7 +287,7 @@ def main():
          f_score(summary_precision, summary_recall))
 
     #out put the result to file
-    out_file = "/home/vic/workspace/Finance/evaluation/win_%d_%s_evaluation.txt" \
+    out_file = "/home/vic/work/Finance/evaluation/win_%d_%s_evaluation.txt" \
         % (SCORE_WINDOW, args.model)
     with open(out_file, "a") as aout:
         if args.all:

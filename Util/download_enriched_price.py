@@ -11,9 +11,9 @@ import boto
 def download():
     conn = boto.connect_sdb()
     domain = conn.lookup("t_enriched_bloomberg_prices")
-    sql = "select * from t_enriched_bloomberg_prices where postDate >='2012-12-01' and postDate<='2013-07-01'"
+    sql = "select * from t_enriched_bloomberg_prices where postDate >= '2013-05-01' and postDate <= '2013-05-31'"
     rs = domain.select(sql)
-    dir = "/home/vic/workspace/data/stock/enriched"
+    dir = "/home/vic/work/data/stock/enriched"
     for r in rs:
         print r
         name = r["name"]

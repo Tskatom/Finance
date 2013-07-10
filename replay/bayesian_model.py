@@ -15,6 +15,8 @@ import boto
 import pytz
 import nltk
 from time import sleep
+import StringIO
+
 
 __processor__ = 'bayesian_model'
 log = logs.getLogger(__processor__)
@@ -172,13 +174,26 @@ def insert_surrogatedata(surrogateDomain, surrogateData):
         pass
 
 
+def getwarningeid(domain, predict_date, stock_index):
+    sql = "select embersId from warnings where model like 'Bayesian%' and "
+    sql += " eventDate='%s' and population='%s' " % (predict_date, stock_index)
+    rs = domain.select(sql)
+    for r in rs:
+        eid = r["embersId"]
+    return eid
+
+
 #predict the stock change type
-def process_single_stock(surrogateDomain, predict_date, stock_index, regeFlag=False):
+def process_single_stock(surrogateDomain, predict_date, stock_index, regeFlag=False, replayIO=None):
     try:
+
+        replayIO.write("Check predict date '%s' whether weekend or holiday\n" % predict_date)
         "Check if the predictive Day is trading day, if so continue, otherwise just return None"
         if_trading_day = check_if_tradingday(surrogateDomain, predict_date, stock_index)
         if if_trading_day is False:
             return None
+
+        replayIO.write("\t'%s' is trading day for index '%s'\n" % (predict_date, stock_index))
 
         predictiveResults = {}
         finalRatio = {}
@@ -189,9 +204,17 @@ def process_single_stock(surrogateDomain, predict_date, stock_index, regeFlag=Fa
 
         "Iteratively compute the probabilty of each cluster for the stock "
         cluster_pro_list = CONFIG["clusterProbability"][stock_index]
+        replayIO.write("Iteratively compute the probabilty of each cluster for the stock %s\n" % stock_index)
+
+        replayIO.write("retrieve past 3 day's news:\n ")
 
         term_list, newsDerived = get_term_list(surrogateDomain, predict_date, stock_index)
+        replayIO.write("\tkeywords list: %s\n" % json.dumps(term_list))
+        replayIO.write("\tparent news embersIDs: %s\n" % newsDerived)
+
+        replayIO.write("retrieve past 3 day's cluster.\n")
         his_cluster_list, stockDerived = get_past_cluster_list(surrogateDomain, predict_date, stock_index)
+        replayIO.write("\tpast 3 days' clusters: %s \n" %  json.dumps(his_cluster_list))
 
         for cluster_type in cluster_pro_list:
             "compute the contribution of 3 past day's trend "
@@ -202,6 +225,7 @@ def process_single_stock(surrogateDomain, predict_date, stock_index, regeFlag=Fa
             predictiveProbability = stockIndexProbability + newsProbability
             predictiveResults[cluster_type] = predictiveProbability
 
+        replayIO.write("Compute the propability for each cluster.\n")
 
         #normalize the probability
         max_val = max(predictiveResults.values())
@@ -217,6 +241,8 @@ def process_single_stock(surrogateDomain, predict_date, stock_index, regeFlag=Fa
         sorted_ratio = sorted(finalRatio.iteritems(), key=operator.itemgetter(1), reverse=True)
         clusterProbability[stock_index] = {}
         clusterProbability[stock_index][predict_date] = sorted_ratio[0]
+
+        replayIO.write("\tprobability for each cluster:[%s]\n" % json.dumps(sorted_ratio))
 
         "Construct the Surrogate data"
         surrogateData = {}
@@ -260,6 +286,8 @@ def process_single_stock(surrogateDomain, predict_date, stock_index, regeFlag=Fa
         jsonStr = json.dumps(surrogateData)
         embersId = hashlib.sha1(json.dumps(jsonStr)).hexdigest()
         surrogateData["embersId"] = embersId
+
+        replayIO.write("Surrogate message: \n\t%s\n" % json.dumps(surrogateData))
 
         "if the action is not for regenerating past warning, then store the surrogate and warning"
         if not regeFlag:
@@ -344,12 +372,12 @@ def insert_warningmessage(warningDomain, warningMessage):
 
 
 # using surrogate data to determine whether it triger a sigma event
-def warning_check(warningDomain, surObj, regeFlag=False):
+def warning_check(warningDomain, surObj, regeFlag=False, replayIO=None):
 #   surObj = {'embersId': 'f0c030a20e28a12134d9ad0e98fd0861fae7438b', 'confidence': 0.13429584033181682, 'strength': '4', 'derivedFrom': [u'5df18f77723885a12fa6943421c819c90c6a2a02', u'be031c4dcf3eb9bba2d86870683897dfc4ec4051', u'3c6571a4d89b17ed01f1345c80cf2802a8a02b7b'], 'shiftDate': '2011-08-08', 'shiftType': 'Trend', 'location': u'Colombia', 'date': '2012-10-03', 'model': 'Finance Stock Model', 'valueSpectrum': 'changePercent', 'confidenceIsProbability': True, 'population': 'COLCAP'}
     stock_index = surObj["population"]
     trend_type = surObj["strength"]
     date = surObj["shiftDate"]
-
+    replayIO.write("Check whether the surrogate data trigger the warning.\n")
     try:
         pClusster = trend_type
         table_name = "t_enriched_bloomberg_prices"
@@ -359,18 +387,23 @@ def warning_check(warningDomain, surObj, regeFlag=False):
         rs = warningDomain.select(sql, max_items=1)
         for r in rs:
             current_val = float(r['currentValue'])
-
+        replayIO.write("Retrive past 30 day's price daily change.\n")
         querySql = "select oneDayChange from {} where name='{}' and postDate <'{}' order by postDate desc".format(table_name, stock_index, date)
         rs = warningDomain.select(querySql, max_items=30)
         moving30 = []
         for r in rs:
             moving30.append(float(r['oneDayChange']))
 
+        replayIO.write("\t %s\n" % json.dumps(moving30))
+
+        replayIO.write("Retrive past 90 day's price daily change.\n")
         querySql = "select oneDayChange from {} where name='{}' and postDate <'{}' order by postDate desc".format(table_name, stock_index, date)
         rs = warningDomain.select(querySql, max_items=90)
         moving90 = []
         for r in rs:
             moving90.append(float(r['oneDayChange']))
+
+        replayIO.write("\t %s\n" % json.dumps(moving90))
 
         m30 = sum(moving30) / len(moving30)
         m90 = sum(moving90) / len(moving90)
@@ -417,11 +450,14 @@ def warning_check(warningDomain, surObj, regeFlag=False):
         embersId = hashlib.sha1(json.dumps(warningMessage)).hexdigest()
         warningMessage["embersId"] = embersId
 
+        replayIO.write("Warning Message: \n\t%s\n" % json.dumps(warningMessage))
+
         if eventType != "0000":
             "push warningmessage to ZMQ"
             with queue.open(WARNING_PORT, 'w', capture=True) as outq:
                 sleep(1)
                 outq.write(warningMessage)
+            replayIO.write("Publish Warningmessage to ZMQ!\n")
         if not regeFlag:
             insert_warningmessage(warningDomain, warningMessage)
         if eventType != "0000":
@@ -640,9 +676,14 @@ def main():
 
         "Process stock each by each"
         for stock in stock_list:
-            surrogate = process_single_stock(surrogateDomain, rege_date, stock, True)
+            replayIO = StringIO.StringIO()
+            surrogate = process_single_stock(surrogateDomain, rege_date, stock, True, replayIO)
             if surrogate:
-                warning = warning_check(warningDomain, surrogate, True)
+                warning = warning_check(warningDomain, surrogate, True, replayIO)
+            replayInfo = replayIO.getvalue()
+            weid = getwarningeid(surrogateDomain, rege_date, stock)
+            with open("./demo/%s.txt" % weid, "w") as win:
+                win.write(replayInfo)
 
     if conn:
         conn.close()

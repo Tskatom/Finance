@@ -19,6 +19,7 @@ from datetime import datetime
 import sys
 import math
 import json
+import StringIO
 
 
 STOCK_EVENT = "041"
@@ -37,6 +38,16 @@ MARKET_TYPE = {"MERVAL": "stock", "USDARS": "currency", "IBOV": "stock", "USDBRL
 __processor__ = 'duration_analysis_model'
 log = logs.getLogger(__processor__)
 __version__ = "0.0.1"
+
+
+def getwarningeid(domain, event_date, rep_index):
+    print event_date, rep_index
+    sql = "select embersId from warnings where model like 'Duration%' "
+    sql += " and eventDate='%s' and population='%s'" % (event_date, rep_index)
+    rs = domain.select(sql)
+    for r in rs:
+        eid = r["embersId"]
+    return eid
 
 
 class warning():
@@ -147,19 +158,22 @@ def transfer_zs(zscore):
     return zscore
 
 
-def durationProcess(rule, conn, enriched_price, zmq_queue, test_flag=False):
+def durationProcess(rule, conn, enriched_price, zmq_queue, test_flag=False, replayIO=None):
     "get the zscores"
     zscore30 = round(float(enriched_price["zscore30"]), 4)
     zscore90 = round(float(enriched_price["zscore90"]), 4)
     z30 = transfer_zs(zscore30)
     z90 = transfer_zs(zscore90)
     var_index = enriched_price["name"]
+    replayIO.write("Retrive transfered zscore values for %s: z30:[%0.2f] z90:[%0.2f]\n" % (var_index, z30, z90))
     "check the triger list"
     for rep_index in rule["rules"]:
         if var_index in rule["rules"][rep_index]:
+            replayIO.write("Get Triggered Rule : \n\t %s\n" % json.dumps(rule["rules"][rep_index][var_index]))
             var_index_zs = rule["rules"][rep_index][var_index]
             if z30 in var_index_zs.get("z30", {}) or z90 in var_index_zs.get("z90", {}):
                 "triger the warning"
+                replayIO.write("Trigger the warning threshold for [%s].\n" % rep_index)
                 population = rep_index
                 finance_type = MARKET_TYPE[rep_index]
                 post_date = enriched_price["postDate"]
@@ -198,9 +212,17 @@ def durationProcess(rule, conn, enriched_price, zmq_queue, test_flag=False):
                     warn.setLocation(country)
                     if test_flag:
                         warn.setDate(post_date)
+                        domain = conn.lookup("warnings")
+                        warn_eid = getwarningeid(domain, event_date, rep_index)
                     warn.generateIdDate()
+                    replayIO.write("Construct the warning message:\n\t %s \n." % json.dumps(warn.warning))
 
                     warn.send(zmq_queue)
+                    replayIO.write("Push Warning Message to ZMQ!\n")
+                    if test_flag:
+                        with open("./demo/%s.txt" % warn_eid, "w") as dw:
+                            dw.write(replayIO.getvalue())
+                            replayIO = StringIO.StringIO()
 
 
 def main():
@@ -229,7 +251,8 @@ def main():
         with queue.open(arg.sub, 'r') as inq:
             for m in inq:
                 try:
-                    durationProcess(rule, conn, m, arg.pub, test_flag)
+                    replayIO = StringIO.StringIO()
+                    durationProcess(rule, conn, m, arg.pub, test_flag, replayIO)
                 except KeyboardInterrupt:
                     log.info('GOT SIGINT, exiting!')
                     break
@@ -243,7 +266,8 @@ def main():
         for m in enrich_messages:
             m = json.loads(m.strip())
             try:
-                durationProcess(rule, conn, m, arg.pub, test_flag)
+                replayIO = StringIO.StringIO()
+                durationProcess(rule, conn, m, arg.pub, test_flag, replayIO)
             except KeyboardInterrupt:
                 log.info('GOT SIGINT, exiting!')
                 break
