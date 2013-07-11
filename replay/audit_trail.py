@@ -223,7 +223,8 @@ def duration():
 
 
 def main():
-    duration()
+#    duration()
+    bayesian()
 
 
 if __name__ == "__main__":
